@@ -6,6 +6,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * A list of <strong>expect</strong> assertion methods for Collections.
+ *
+ * @see org.emw.assertion.bool.BooleanAssertor
+ * @see org.emw.assertion.string.StringAssertor
+ * @see org.emw.assertion.number.NumberAssertor
+ * @see org.emw.assertion.date.DateAssertor
+ */
 public interface CollectionAssertor {
     default CollectionTo expect(@Nullable Object[] actual) {
         return expect("", actual);

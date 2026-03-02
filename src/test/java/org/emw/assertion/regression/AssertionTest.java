@@ -1,7 +1,6 @@
 package org.emw.assertion.regression;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.emw.assertion.AssertionGroup;
 import org.emw.assertion.Assertor;
 import org.emw.assertion.exception.AssertionGroupError;
 import org.testng.annotations.Test;
@@ -210,7 +209,7 @@ public class AssertionTest implements Assertor {
     @Test
     public void testGroup() {
         try {
-            AssertionGroup.group(g -> {
+            assertionGroup(g -> {
                 g.expect("test").to.be("test1");
                 g.expect("test").to.be("test2");
                 g.expect(1).to.be(1);

@@ -3,15 +3,20 @@ package org.emw.assertion;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.bool.BooleanAssertionGroup;
+import org.emw.assertion.bool.BooleanAssertor;
 import org.emw.assertion.bool.BooleanTo;
 import org.emw.assertion.collection.CollectionAssertionGroup;
+import org.emw.assertion.collection.CollectionAssertor;
 import org.emw.assertion.collection.CollectionTo;
 import org.emw.assertion.date.DateAssertionGroup;
+import org.emw.assertion.date.DateAssertor;
 import org.emw.assertion.date.DateTo;
 import org.emw.assertion.exception.AssertionGroupError;
 import org.emw.assertion.number.NumberAssertionGroup;
+import org.emw.assertion.number.NumberAssertor;
 import org.emw.assertion.number.NumberTo;
 import org.emw.assertion.string.StringAssertionGroup;
+import org.emw.assertion.string.StringAssertor;
 import org.emw.assertion.string.StringTo;
 
 import java.sql.Date;
@@ -20,19 +25,100 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * AssertionGroup allows grouping multiple assertions.
+ * <p>
+ * All assertions within a group are tested before throwing {@link AssertionGroupError}. If multiple assertion failed,
+ * all errors are returned in exception message.
+ * <p>
+ * This is useful when multiple values need to be checked within the same context.
+ * <p>
+ * <pre>{@code
+ *     // This would throw AssertionError on the first "expect". Until this is fixed, you have no idea
+ *     // there are other errors or not.
+ *     expect("test").to.be("test1");
+ *     expect("test").to.be("test2");
+ *     expect(1).to.be(1);
+ *     expect(1).to.be(0);
+ * }</pre>
+ * <p>
+ * <pre>{@code
+ *     // This would assert all of "expect" and show which ones fail, saving repeated execution of tests.
+ *     assertionGroup(g -> {
+ *         g.expect("test").to.be("test1");
+ *         g.expect("test").to.be("test2");
+ *         g.expect(1).to.be(1);
+ *         g.expect(1).to.be(0);
+ *     });
+ * }</pre>
+ *
+ * <p>
+ * The exception shows all assertion errors at once.
+ * <p>
+ * <pre>{@code
+ * org.emw.assertion.exception.AssertionGroupError: 3 errors in group
+ *
+ * 	Error #1: java.lang.AssertionError: Expected 'test' to equal 'test1'.
+ *
+ * 	Error #2: java.lang.AssertionError: Expected 'test' to equal 'test2'.
+ *
+ * 	Error #3: java.lang.AssertionError: Expected '1' to equal '0'.
+ *
+ * 	Error Stack #1:
+ * 		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
+ * 		at org.emw.assertion.string.StringConditions.be(StringConditions.java:23)
+ * 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
+ * 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
+ * 		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+ * 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+ *
+ * 	Error Stack #2:
+ * 		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
+ * 		at org.emw.assertion.string.StringConditions.be(StringConditions.java:23)
+ * 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
+ * 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
+ * 		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+ * 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+ *
+ * 	Error Stack #3:
+ * 		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
+ * 		at org.emw.assertion.number.NumberConditions.be(NumberConditions.java:35)
+ * 		at org.emw.assertion.number.NumberConditions.be(NumberConditions.java:19)
+ * 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
+ * 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
+ * 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
+ * 		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+ * 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+ *
+ * 	at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:74)
+ * 	at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
+ * 	at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
+ * 	at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+ * 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+ * 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+ * 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+ * 	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:687)
+ * }</pre>
+ *
+ * @see Assertor
+ * @see StringAssertor
+ * @see BooleanAssertor
+ * @see CollectionAssertor
+ * @see DateAssertor
+ * @see NumberAssertor
+ */
 public final class AssertionGroup {
     private final List<Throwable> throwables = new ArrayList<>();
-
-    public StringAssertionGroup string;
 
     private AssertionGroup() {
     }
 
-    public static void group(@NonNull GroupAction action) {
-        group("", action);
-    }
-
-    public static void group(@NonNull String groupName, @NonNull GroupAction action) {
+    static void group(@NonNull String groupName, @NonNull GroupAction action) {
         final AssertionGroup assertionGroup = new AssertionGroup();
 
         try {
