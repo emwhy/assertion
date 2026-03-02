@@ -7,11 +7,11 @@ import org.emwhyware.assertion.Connector;
 
 import java.time.LocalDate;
 
-public class DateTo extends Connector {
-    public final DateNotBe to;
+public class DateNot extends Connector {
+    public final DateBeConditions be;
 
-    protected DateTo(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actual, boolean negated) {
+    protected DateNot(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actual, boolean negated) {
         super(group, labelForActual);
-        this.to = new DateNotBe(group, labelForActual, actual, negated);
+        this.be = new DateBeConditions(group, labelForActual, actual, negated);
     }
 }

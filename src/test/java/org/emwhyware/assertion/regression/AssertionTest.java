@@ -122,75 +122,89 @@ public class AssertionTest implements Assertor {
 
     @Test
     public void testBoolean() {
-        expect("Test 1", true).to.beTrue();
-        expect("Test 2", false).not.to.beTrue();
+        final Boolean nullBoolean = null;
+        expect("Test 1", true).to.be.trueValue();
+        expect("Test 2", false).to.not.be.trueValue();
+        expect("Test 3", nullBoolean).to.be.nullValue();
+        expect("Test 4", Boolean.valueOf(false)).to.not.be.nullValue();
 
-        expectError(() -> expect("Test 3", false).to.beTrue());
-        expectError(() -> expect("Test 4", true).not.to.beTrue());
+        expectError(() -> expect("Test 5", false).to.be.trueValue());
+        expectError(() -> expect("Test 6", true).to.not.be.trueValue());
     }
 
     @Test
     public void testDate() {
-        expect("Test 1", LocalDate.of(2020, 1, 1)).to.beSameDate(LocalDate.of(2020, 1, 1));
-        expect("Test 2", LocalDate.of(2020, 1, 1)).not.to.beSameDate(LocalDate.of(2020, 1, 2));
-        expect("Test 3", LocalDate.of(2020, 1, 1)).to.beAfter(LocalDate.of(2019, 12, 31));
-        expect("Test 4", LocalDate.of(2020, 1, 1)).to.beBefore(LocalDate.of(2020, 1, 2));
-        expect("Test 5", LocalDate.of(2020, 1, 1)).to.beSameOrBefore(LocalDate.of(2020, 1, 1));
-        expect("Test 6", LocalDate.of(2020, 1, 1)).to.beSameOrBefore(LocalDate.of(2020, 1, 2));
-        expect("Test 7", LocalDate.of(2020, 1, 1)).to.beSameOrAfter(LocalDate.of(2020, 1, 1));
-        expect("Test 8", LocalDate.of(2020, 1, 1)).to.beSameOrAfter(LocalDate.of(2019, 12, 31));
-        expect("Test 9", LocalDate.of(2020, 1, 1)).to.beBetween(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 2));
+        final LocalDate nullDate = null;
 
-        expectError(() -> expect("Test 10", LocalDate.of(2020, 1, 1)).to.beSameDate(LocalDate.of(2020, 1, 2)));
-        expectError(() -> expect("Test 11", LocalDate.of(2020, 1, 1)).not.to.beSameDate(LocalDate.of(2020, 1, 1)));
-        expectError(() -> expect("Test 12", LocalDate.of(2020, 1, 1)).to.beAfter(LocalDate.of(2020, 1, 1)));
-        expectError(() -> expect("Test 13", LocalDate.of(2020, 1, 1)).to.beAfter(LocalDate.of(2020, 1, 2)));
-        expectError(() -> expect("Test 14", LocalDate.of(2020, 1, 1)).to.beBefore(LocalDate.of(2020, 1, 1)));
-        expectError(() -> expect("Test 15", LocalDate.of(2020, 1, 1)).to.beBefore(LocalDate.of(2019, 12, 31)));
-        expectError(() -> expect("Test 16", LocalDate.of(2020, 1, 1)).to.beSameOrBefore(LocalDate.of(2019, 12, 31)));
-        expectError(() -> expect("Test 17", LocalDate.of(2020, 1, 1)).to.beSameOrAfter(LocalDate.of(2020, 1, 2)));
-        expectError(() -> expect("Test 18", LocalDate.of(2020, 1, 3)).to.beBetween(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)));
-        expectError(() -> expect("Test 19", LocalDate.of(2020, 1, 5)).to.beBetween(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 1)));
-        expectError(() -> expect("Test 20", LocalDate.of(2020, 1, 1)).to.beBetween(LocalDate.of(2020, 1, 2), LocalDate.of(2021, 1, 1)));
+        expect("Test 1", LocalDate.of(2020, 1, 1)).to.be.sameDate(LocalDate.of(2020, 1, 1));
+        expect("Test 2", LocalDate.of(2020, 1, 1)).to.not.be.sameDate(LocalDate.of(2020, 1, 2));
+        expect("Test 3", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2019, 12, 31));
+        expect("Test 4", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2020, 1, 2));
+        expect("Test 5", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2020, 1, 1));
+        expect("Test 6", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2020, 1, 2));
+        expect("Test 7", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2020, 1, 1));
+        expect("Test 8", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2019, 12, 31));
+        expect("Test 9", LocalDate.of(2020, 1, 1)).to.be.between(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 2));
+        expect("Test 10", nullDate).to.be.nullValue();
+        expect("Test 11", LocalDate.now()).to.not.be.nullValue();
+
+        expectError(() -> expect("Test 12", LocalDate.of(2020, 1, 1)).to.be.sameDate(LocalDate.of(2020, 1, 2)));
+        expectError(() -> expect("Test 13", LocalDate.of(2020, 1, 1)).to.not.be.sameDate(LocalDate.of(2020, 1, 1)));
+        expectError(() -> expect("Test 14", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2020, 1, 1)));
+        expectError(() -> expect("Test 15", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2020, 1, 2)));
+        expectError(() -> expect("Test 16", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2020, 1, 1)));
+        expectError(() -> expect("Test 17", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2019, 12, 31)));
+        expectError(() -> expect("Test 18", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2019, 12, 31)));
+        expectError(() -> expect("Test 19", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2020, 1, 2)));
+        expectError(() -> expect("Test 20", LocalDate.of(2020, 1, 3)).to.be.between(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)));
+        expectError(() -> expect("Test 21", LocalDate.of(2020, 1, 5)).to.be.between(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 1)));
+        expectError(() -> expect("Test 22", LocalDate.of(2020, 1, 1)).to.be.between(LocalDate.of(2020, 1, 2), LocalDate.of(2021, 1, 1)));
+        expectError(() -> expect("Test 23", LocalDate.now()).to.be.nullValue());
+        expectError(() -> expect("Test 24", nullDate).to.not.be.nullValue());
     }
 
     @Test
     public void testNumber() {
-        expect("Test 1", 10).to.equal(10);
-        expect("Test 2", 10.1).to.equal(10.1f);
-        expect("Test 3", 10.1).not.to.equal(10);
-        expect("Test 4", 10.1).to.beMoreThan(10);
-        expect("Test 5", 10.1).to.beLessThan(10.2f);
-        expect("Test 6", 10).to.beMoreThanOrEqual(9.9f);
-        expect("Test 7", 10).to.beLessThanOrEqual(10.1f);
-        expect("Test 8", 10).to.beMoreThanOrEqual(10.0f);
-        expect("Test 9", 10).to.beLessThanOrEqual(10.0);
-        expect("Test 10", 10).to.beBetween(9.9, 11);
+        final Double nullNumber = null;
 
-        expectError(() -> expect("Test 11", 10).to.beBetween(10.1, 11));
+        expect("Test 1", 10).to.be(10);
+        expect("Test 2", 10.1).to.be(10.1f);
+        expect("Test 3", 10.1).to.not.be(10);
+        expect("Test 4", 10.1).to.be.moreThan(10);
+        expect("Test 5", 10.1).to.be.lessThan(10.2f);
+        expect("Test 6", 10).to.be.moreThanOrEqual(9.9f);
+        expect("Test 7", 10).to.be.lessThanOrEqual(10.1f);
+        expect("Test 8", 10).to.be.moreThanOrEqual(10.0f);
+        expect("Test 9", 10).to.be.lessThanOrEqual(10.0);
+        expect("Test 10", 10).to.be.between(9.9, 11);
+        expect("Test 11", nullNumber).to.be.nullValue();
+        expect("Test 12", Double.valueOf(1)).to.not.be.nullValue();
 
-        expectError(() -> expect("Test 12", 10).to.equal(11));
-        expectError(() -> expect("Test 13", 10.1).to.equal(10.11));
-        expectError(() -> expect("Test 14", 10).not.to.equal(10.0));
+        expectError(() -> expect("Test 13", 10).to.be.between(10.1, 11));
 
-        expectError(() -> expect("Test 15", 10).to.beMoreThan(10));
-        expectError(() -> expect("Test 16", 10).to.beMoreThan(10.1));
-        expectError(() -> expect("Test 17", -5).to.beMoreThan(0));
+        expectError(() -> expect("Test 14", 10).to.be(11));
+        expectError(() -> expect("Test 15", 10.1).to.be(10.11));
+        expectError(() -> expect("Test 16", 10).to.not.be(10.0));
 
-        expectError(() -> expect("Test 18", 10).to.beLessThan(10));
-        expectError(() -> expect("Test 19", 10.5).to.beLessThan(10.4));
-        expectError(() -> expect("Test 20", 0).to.beLessThan(-1));
+        expectError(() -> expect("Test 17", 10).to.be.moreThan(10));
+        expectError(() -> expect("Test 18", 10).to.be.moreThan(10.1));
+        expectError(() -> expect("Test 19", -5).to.be.moreThan(0));
 
-        expectError(() -> expect("Test 21", 10).to.beMoreThanOrEqual(11));
-        expectError(() -> expect("Test 22", 10.1).to.beLessThanOrEqual(10.0));
-        expectError(() -> expect("Test 23", -10).to.beMoreThanOrEqual(-9.9));
+        expectError(() -> expect("Test 20", 10).to.be.lessThan(10));
+        expectError(() -> expect("Test 21", 10.5).to.be.lessThan(10.4));
+        expectError(() -> expect("Test 22", 0).to.be.lessThan(-1));
 
-        expectError(() -> expect("Test 24", 11.1).to.beBetween(10, 11));
-        expectError(() -> expect("Test 25", 9.9).to.beBetween(10, 11));
-        expectError(() -> expect("Test 26", 5).to.beBetween(6, 7));
+        expectError(() -> expect("Test 23", 10).to.be.moreThanOrEqual(11));
+        expectError(() -> expect("Test 24", 10.1).to.be.lessThanOrEqual(10.0));
+        expectError(() -> expect("Test 25", -10).to.be.moreThanOrEqual(-9.9));
 
-        expectError(() -> expect("Test 27", 100L).to.beLessThan(50));
-        expectError(() -> expect("Test 28", 0.01f).to.beMoreThan(0.1));
+        expectError(() -> expect("Test 26", 11.1).to.be.between(10, 11));
+        expectError(() -> expect("Test 27", 9.9).to.be.between(10, 11));
+        expectError(() -> expect("Test 28", 5).to.be.between(6, 7));
+
+        expectError(() -> expect("Test 27", 100L).to.be.lessThan(50));
+        expectError(() -> expect("Test 28", 0.01f).to.be.moreThan(0.1));
+        expectError(() -> expect("Test 29", nullNumber).to.be.moreThan(0.1));
     }
 
     @Test
@@ -199,8 +213,8 @@ public class AssertionTest implements Assertor {
             AssertionGroup.group(g -> {
                 g.expect("test").to.be("test1");
                 g.expect("test").to.be("test2");
-                g.expect(1).to.equal(1);
-                g.expect(1).to.equal(0);
+                g.expect(1).to.be(1);
+                g.expect(1).to.be(0);
             });
         } catch (AssertionGroupError ex) {
             expect(ex.getMessage()).to.contain("Expected 'test' to equal 'test1'.");

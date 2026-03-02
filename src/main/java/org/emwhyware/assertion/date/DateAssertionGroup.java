@@ -1,6 +1,7 @@
 package org.emwhyware.assertion.date;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.assertion.AssertionGroup;
 
 import java.sql.Date;
@@ -13,19 +14,19 @@ public final class DateAssertionGroup {
         this.group = group;
     }
 
-    public DateToOrNot expect(@NonNull Date actual) {
-        return expect("", actual.toLocalDate());
+    public DateTo expect(@Nullable Date actual) {
+        return expect("", actual == null ? null : actual.toLocalDate());
     }
 
-    public DateToOrNot expect(@NonNull LocalDate actual) {
+    public DateTo expect(@Nullable LocalDate actual) {
         return expect("", actual);
     }
 
-    public DateToOrNot expect(@NonNull String labelForActual, @NonNull Date actual) {
-        return expect(labelForActual, actual.toLocalDate());
+    public DateTo expect(@NonNull String labelForActual, @Nullable Date actual) {
+        return expect(labelForActual, actual == null ? null : actual.toLocalDate());
     }
 
-    public DateToOrNot expect(@NonNull String labelForActual, @NonNull LocalDate actual) {
-        return new DateToOrNot(group, labelForActual, actual, false);
+    public DateTo expect(@NonNull String labelForActual, @Nullable LocalDate actual) {
+        return new DateTo(group, labelForActual, actual, false);
     }
 }

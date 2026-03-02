@@ -3,14 +3,15 @@ package org.emwhyware.assertion;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.assertion.bool.BooleanAssertionGroup;
+import org.emwhyware.assertion.bool.BooleanTo;
 import org.emwhyware.assertion.bool.BooleanToOrNot;
 import org.emwhyware.assertion.collection.CollectionAssertionGroup;
 import org.emwhyware.assertion.collection.CollectionTo;
 import org.emwhyware.assertion.date.DateAssertionGroup;
-import org.emwhyware.assertion.date.DateToOrNot;
+import org.emwhyware.assertion.date.DateTo;
 import org.emwhyware.assertion.exception.AssertionGroupError;
 import org.emwhyware.assertion.number.NumberAssertionGroup;
-import org.emwhyware.assertion.number.NumberToOrNot;
+import org.emwhyware.assertion.number.NumberTo;
 import org.emwhyware.assertion.string.StringAssertionGroup;
 import org.emwhyware.assertion.string.StringTo;
 
@@ -62,11 +63,11 @@ public final class AssertionGroup {
         private final BooleanAssertionGroup bool;
 
         private Group(AssertionGroup group) {
-            this.string = new StringAssertionGroup(AssertionGroup.this);
-            this.collection = new CollectionAssertionGroup(AssertionGroup.this);
-            this.number = new NumberAssertionGroup(AssertionGroup.this);
-            this.date = new DateAssertionGroup(AssertionGroup.this);
-            this.bool = new BooleanAssertionGroup(AssertionGroup.this);
+            this.string = new StringAssertionGroup(group);
+            this.collection = new CollectionAssertionGroup(group);
+            this.number = new NumberAssertionGroup(group);
+            this.date = new DateAssertionGroup(group);
+            this.bool = new BooleanAssertionGroup(group);
         }
 
         public StringTo expect(@Nullable String actual) {
@@ -77,61 +78,60 @@ public final class AssertionGroup {
             return string.expect(labelForActual, actual);
         }
 
-
-        public NumberToOrNot expect(int actual) {
+        public NumberTo expect(int actual) {
             return expect(Integer.valueOf(actual));
         }
 
-        public NumberToOrNot expect(long actual) {
+        public NumberTo expect(long actual) {
             return expect(Long.valueOf(actual));
         }
 
-        public NumberToOrNot expect(float actual) {
+        public NumberTo expect(float actual) {
             return expect(Float.valueOf(actual));
         }
 
-        public NumberToOrNot expect(double actual) {
+        public NumberTo expect(double actual) {
             return expect(Double.valueOf(actual));
         }
 
-        public NumberToOrNot expect(@NonNull String labelForActual, int actual) {
+        public NumberTo expect(@NonNull String labelForActual, int actual) {
             return expect(labelForActual, Integer.valueOf(actual));
         }
 
-        public NumberToOrNot expect(@NonNull String labelForActual, long actual) {
+        public NumberTo expect(@NonNull String labelForActual, long actual) {
             return expect(labelForActual, Long.valueOf(actual));
         }
 
-        public NumberToOrNot expect(@NonNull String labelForActual, float actual) {
+        public NumberTo expect(@NonNull String labelForActual, float actual) {
             return expect(labelForActual, Float.valueOf(actual));
         }
 
-        public NumberToOrNot expect(@NonNull String labelForActual, double actual) {
+        public NumberTo expect(@NonNull String labelForActual, double actual) {
             return expect(labelForActual, Double.valueOf(actual));
         }
 
-        public NumberToOrNot expect(@NonNull Number actual) {
+        public NumberTo expect(@NonNull Number actual) {
             return expect("", actual);
         }
 
-        public NumberToOrNot expect(@NonNull String labelForActual, @NonNull Number actual) {
+        public NumberTo expect(@NonNull String labelForActual, @NonNull Number actual) {
             return number.expect(labelForActual, actual);
         }
 
 
-        public DateToOrNot expect(@NonNull Date actual) {
+        public DateTo expect(@NonNull Date actual) {
             return expect("", actual.toLocalDate());
         }
 
-        public DateToOrNot expect(@NonNull LocalDate actual) {
+        public DateTo expect(@NonNull LocalDate actual) {
             return expect("", actual);
         }
 
-        public DateToOrNot expect(@NonNull String labelForActual, @NonNull Date actual) {
+        public DateTo expect(@NonNull String labelForActual, @NonNull Date actual) {
             return expect(labelForActual, actual.toLocalDate());
         }
 
-        public DateToOrNot expect(@NonNull String labelForActual, @NonNull LocalDate actual) {
+        public DateTo expect(@NonNull String labelForActual, @NonNull LocalDate actual) {
             return date.expect(labelForActual, actual);
         }
 
@@ -151,13 +151,22 @@ public final class AssertionGroup {
             return collection.expect(labelForActual, actual);
         }
 
-        public BooleanToOrNot expect(boolean actual) {
+        public BooleanTo expect(boolean actual) {
             return expect("", actual);
         }
 
-        public BooleanToOrNot expect(@NonNull String labelForActual, boolean actual) {
+        public BooleanTo expect(@NonNull String labelForActual, boolean actual) {
             return bool.expect(labelForActual, actual);
         }
+
+        public BooleanTo expect(@Nullable Boolean actual) {
+            return expect("", actual);
+        }
+
+        public BooleanTo expect(@NonNull String labelForActual, @Nullable Boolean actual) {
+            return bool.expect(labelForActual, actual);
+        }
+
     }
 
     public interface GroupAction {

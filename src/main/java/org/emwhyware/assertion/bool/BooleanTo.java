@@ -6,10 +6,10 @@ import org.emwhyware.assertion.AssertionGroup;
 import org.emwhyware.assertion.Connector;
 
 public class BooleanTo extends Connector {
-    public final BooleanConditions to;
+    public final BooleanNotBe to;
 
-    protected BooleanTo(@Nullable AssertionGroup group, @NonNull String labelForActual, boolean actual, boolean negated) {
+    protected BooleanTo(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Boolean actual, boolean negated) {
         super(group, labelForActual);
-        this.to = new BooleanConditions(group, labelForActual, actual, negated);
+        this.to = new BooleanNotBe(group, labelForActual, actual, negated);
     }
 }

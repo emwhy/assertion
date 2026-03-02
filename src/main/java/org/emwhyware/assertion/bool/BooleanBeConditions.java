@@ -5,17 +5,27 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.assertion.AssertionGroup;
 import org.emwhyware.assertion.Conditions;
 
-public final class BooleanConditions extends Conditions {
-    private final boolean actual;
+public final class BooleanBeConditions extends Conditions {
+    private final Boolean actual;
 
-    BooleanConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, boolean actual, boolean negated) {
+    BooleanBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Boolean actual, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actual = actual;
     }
 
-    public void beTrue() {
+    public void trueValue() {
         assertCondition(partialAssertionErrorMessage() + "to be true.", () -> {
-            return negated != actual;
+            if (actual == null) {
+                return false;
+            } else {
+                return negated != actual;
+            }
+        });
+    }
+
+    public void nullValue() {
+        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+            return negated != (actual == null);
         });
     }
 

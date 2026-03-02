@@ -19,7 +19,6 @@ public final class CollectionBeConditions extends Conditions {
         this.anyOrder = anyOrder;
     }
 
-
     public void empty() {
         assertCondition(partialAssertionErrorMessage() + "to be empty.", () -> {
             return actualCollection != null && negated != actualCollection.isEmpty();

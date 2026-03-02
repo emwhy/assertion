@@ -10,43 +10,43 @@ public final class NumberAssertionGroup {
         this.group = group;
     }
 
-    public NumberToOrNot expect(int actual) {
+    public NumberTo expect(int actual) {
         return expect(Integer.valueOf(actual));
     }
 
-    public NumberToOrNot expect(long actual) {
+    public NumberTo expect(long actual) {
         return expect(Long.valueOf(actual));
     }
 
-    public NumberToOrNot expect(float actual) {
+    public NumberTo expect(float actual) {
         return expect(Float.valueOf(actual));
     }
 
-    public NumberToOrNot expect(double actual) {
+    public NumberTo expect(double actual) {
         return expect(Double.valueOf(actual));
     }
 
-    public NumberToOrNot expect(@NonNull String labelForActual, int actual) {
+    public NumberTo expect(@NonNull String labelForActual, int actual) {
         return expect(labelForActual, Integer.valueOf(actual));
     }
 
-    public NumberToOrNot expect(@NonNull String labelForActual, long actual) {
+    public NumberTo expect(@NonNull String labelForActual, long actual) {
         return expect(labelForActual, Long.valueOf(actual));
     }
 
-    public NumberToOrNot expect(@NonNull String labelForActual, float actual) {
+    public NumberTo expect(@NonNull String labelForActual, float actual) {
         return expect(labelForActual, Float.valueOf(actual));
     }
 
-    public NumberToOrNot expect(@NonNull String labelForActual, double actual) {
+    public NumberTo expect(@NonNull String labelForActual, double actual) {
         return expect(labelForActual, Double.valueOf(actual));
     }
 
-    public NumberToOrNot expect(@NonNull Number actual) {
+    public NumberTo expect(@NonNull Number actual) {
         return expect("", actual);
     }
 
-    public NumberToOrNot expect(@NonNull String labelForActual, @NonNull Number actual) {
-        return new NumberToOrNot(group, labelForActual, actual, false);
+    public NumberTo expect(@NonNull String labelForActual, @NonNull Number actual) {
+        return new NumberTo(group, labelForActual, actual, false);
     }
 }
