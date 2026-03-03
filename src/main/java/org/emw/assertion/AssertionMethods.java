@@ -3,11 +3,11 @@ package org.emw.assertion;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Conditions extends Connector {
+public abstract class AssertionMethods extends Connector {
     protected final boolean negated;
     protected final boolean ignoreCase;
 
-    protected Conditions(@Nullable AssertionGroup group, @NonNull String labelForActual, boolean negated, boolean ignoreCase) {
+    protected AssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual);
         this.negated = negated;
         this.ignoreCase = ignoreCase;

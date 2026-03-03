@@ -3,15 +3,15 @@ package org.emw.assertion.collection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
-import org.emw.assertion.Conditions;
+import org.emw.assertion.AssertionMethods;
 
 import java.util.Collection;
 
-public final class CollectionBeConditions extends Conditions {
+public final class CollectionBeAssertionMethods extends AssertionMethods {
     private final @Nullable Collection<?> actualCollection;
     private final boolean anyOrder;
 
-    CollectionBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
+    CollectionBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
         super(group, labelForActual, negated, ignoreCase);
         this.actualCollection = actual;
         this.anyOrder = anyOrder;

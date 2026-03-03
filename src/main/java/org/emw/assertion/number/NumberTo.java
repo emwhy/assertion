@@ -6,10 +6,10 @@ import org.emw.assertion.AssertionGroup;
 import org.emw.assertion.Connector;
 
 public class NumberTo extends Connector {
-    public final NumberAllConditions to;
+    public final NumberAllAssertionMethods to;
 
     protected NumberTo(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual);
-        this.to = new NumberAllConditions(group, labelForActual, actual, negated);
+        this.to = new NumberAllAssertionMethods(group, labelForActual, actual, negated);
     }
 }

@@ -1,10 +1,10 @@
 # emw-Assertion
 
-emw-Assertion is a library that provides fluent assertions. It can be used for any projects, such as UI test automation, API test automation and unit testing, that needs to assert various data types.
+emw-Assertion is a library that provides fluent assertions, inspired by Chai (JavaSCript library) in BDD style. It can be used for any projects, such as UI test automation, API test automation and unit testing, that needs to assert various data types.
 
 ## Highlights
 
-- Fluent, English-like assertion structure with "expect ... to ..." format.
+- Fluent, English-like assertion structure with "expect ... to ..." BDD style format.
 - Supports assertions with string, numeric values and classes, collections, array, date objects (SQL Date and LocalDate), and date/time object (LocalDateTime).
 - Assertion grouping.
 
@@ -128,8 +128,8 @@ org.emw.assertion.exception.AssertionGroupError: 3 errors in group
 	Error #3: java.lang.AssertionError: Expected '1' to equal '0'.
 
 	Error Stack #1:
-		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
-		at org.emw.assertion.string.StringConditions.be(StringConditions.java:23)
+		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertion.string.StringAssertionMethods.be(StringConditions.java:23)
 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
@@ -138,8 +138,8 @@ org.emw.assertion.exception.AssertionGroupError: 3 errors in group
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #2:
-		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
-		at org.emw.assertion.string.StringConditions.be(StringConditions.java:23)
+		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertion.string.StringAssertionMethods.be(StringConditions.java:23)
 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
@@ -148,9 +148,9 @@ org.emw.assertion.exception.AssertionGroupError: 3 errors in group
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #3:
-		at org.emw.assertion.Conditions.assertCondition(Conditions.java:25)
-		at org.emw.assertion.number.NumberConditions.be(NumberConditions.java:35)
-		at org.emw.assertion.number.NumberConditions.be(NumberConditions.java:19)
+		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertion.number.NumberAssertionMethods.be(NumberConditions.java:35)
+		at org.emw.assertion.number.NumberAssertionMethods.be(NumberConditions.java:19)
 		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
 		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
 		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)

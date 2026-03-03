@@ -3,23 +3,23 @@ package org.emw.assertion.collection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
-import org.emw.assertion.Conditions;
+import org.emw.assertion.AssertionMethods;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class CollectionConditions extends Conditions {
-    public final CollectionBeConditions be;
+public class CollectionAssertionMethods extends AssertionMethods {
+    public final CollectionBeAssertionMethods be;
 
     private final @Nullable Collection<?> actualCollection;
     private final boolean anyOrder;
 
-    CollectionConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
+    CollectionAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
         super(group, labelForActual, negated, ignoreCase);
         this.actualCollection = actual;
         this.anyOrder = anyOrder;
-        this.be = new CollectionBeConditions(group, labelForActual, actual, negated, ignoreCase, anyOrder);
+        this.be = new CollectionBeAssertionMethods(group, labelForActual, actual, negated, ignoreCase, anyOrder);
     }
 
     public void be(Object... expected) {

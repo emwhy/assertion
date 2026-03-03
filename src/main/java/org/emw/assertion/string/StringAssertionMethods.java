@@ -3,18 +3,18 @@ package org.emw.assertion.string;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
-import org.emw.assertion.Conditions;
+import org.emw.assertion.AssertionMethods;
 
 import java.util.regex.Pattern;
 
-public class StringConditions extends Conditions {
-    public final StringBeConditions be;
+public class StringAssertionMethods extends AssertionMethods {
+    public final StringBeAssertionMethods be;
     private final @Nullable String actual;
 
-    StringConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
+    StringAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual, negated, ignoreCase);
         this.actual = actual;
-        this.be = new StringBeConditions(group, labelForActual, actual, negated, ignoreCase);
+        this.be = new StringBeAssertionMethods(group, labelForActual, actual, negated, ignoreCase);
     }
 
     public void be(@NonNull String expected) {

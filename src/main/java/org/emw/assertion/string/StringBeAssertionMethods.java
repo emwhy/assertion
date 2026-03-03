@@ -3,15 +3,15 @@ package org.emw.assertion.string;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
-import org.emw.assertion.Conditions;
+import org.emw.assertion.AssertionMethods;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-public final class StringBeConditions extends Conditions {
+public final class StringBeAssertionMethods extends AssertionMethods {
     private final @Nullable String actual;
 
-    StringBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
+    StringBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual, negated, ignoreCase);
         this.actual = actual;
     }

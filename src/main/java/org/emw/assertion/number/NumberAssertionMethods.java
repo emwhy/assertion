@@ -3,16 +3,16 @@ package org.emw.assertion.number;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
-import org.emw.assertion.Conditions;
+import org.emw.assertion.AssertionMethods;
 
-public class NumberConditions extends Conditions {
-    public final NumberBeConditions be;
+public class NumberAssertionMethods extends AssertionMethods {
+    public final NumberBeAssertionMethods be;
     private final @Nullable Number actual;
 
-    NumberConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
+    NumberAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actual = actual;
-        this.be = new NumberBeConditions(group, labelForActual, actual, negated);
+        this.be = new NumberBeAssertionMethods(group, labelForActual, actual, negated);
     }
 
     public void be(int expected) {
