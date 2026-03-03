@@ -8,7 +8,7 @@ import org.emw.assertion.Conditions;
 import java.util.Collection;
 
 public final class CollectionBeConditions extends Conditions {
-    private final Collection<?> actualCollection;
+    private final @Nullable Collection<?> actualCollection;
     private final boolean anyOrder;
 
     CollectionBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
@@ -42,11 +42,11 @@ public final class CollectionBeConditions extends Conditions {
         }
     }
 
-    private String join(Collection<?> collection) {
+    private String join(@Nullable Collection<?> collection) {
         if (collection == null) {
             return "null";
         } else {
-            return "'" + String.join(", ", collection.stream().map(Object::toString).toList()) + "'";
+            return "'" + String.join(", ", collection.stream().map(o -> o == null ? "null" : o.toString()).toList()) + "'";
         }
     }
 }

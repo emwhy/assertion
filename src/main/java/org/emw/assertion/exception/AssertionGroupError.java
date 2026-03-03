@@ -42,14 +42,16 @@ public class AssertionGroupError extends AssertionError {
      */
     @Override
     public String getMessage() {
-        final StringBuilder messageBuilder = new StringBuilder(super.getMessage());
+        final StringBuilder messageBuilder = new StringBuilder(super.getMessage() == null ? "" : super.getMessage());
         int i = 0;
 
         for (Throwable error : errors) {
+            final String message = error.getMessage() == null ? "" : error.getMessage();
+
             messageBuilder.append("\n\n\t");
             messageBuilder.append(AnsiEscapeText.WhiteUnderlined.text("Error #" + (i + 1) + ":"));
             messageBuilder.append(" ").append(error.getClass().getCanonicalName()).append(": ");
-            messageBuilder.append(AnsiEscapeText.WhiteBright.text(error.getMessage().replaceAll("\n", "\n\t\t")));
+            messageBuilder.append(AnsiEscapeText.WhiteBright.text(message.replaceAll("\n", "\n\t\t")));
             i++;
         }
         return messageBuilder.toString();

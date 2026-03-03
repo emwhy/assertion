@@ -10,8 +10,7 @@ import java.util.regex.Pattern;
 
 public class StringConditions extends Conditions {
     public final StringBeConditions be;
-
-    private final String actual;
+    private final @Nullable String actual;
 
     StringConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual, negated, ignoreCase);
@@ -21,7 +20,7 @@ public class StringConditions extends Conditions {
 
     public void be(@NonNull String expected) {
         assertCondition(partialAssertionErrorMessage() + "to equal '" + expected + "'.", () -> {
-            final String testedActual = ignoreCase ? Optional.ofNullable(actual).orElse("").toLowerCase() : Optional.ofNullable(actual).orElse("");
+            final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? expected.toLowerCase() : expected;
 
             return actual != null && negated != testedActual.equals(testedExpected);
@@ -30,7 +29,7 @@ public class StringConditions extends Conditions {
 
     public void contain(@NonNull String expected) {
         assertCondition(partialAssertionErrorMessage() + "to contain '" + expected + "'.", () -> {
-            final String testedActual = ignoreCase ? Optional.ofNullable(actual).orElse("").toLowerCase() : Optional.ofNullable(actual).orElse("");
+            final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? expected.toLowerCase() : expected;
 
             return actual != null && negated != testedActual.contains(testedExpected);
@@ -40,7 +39,7 @@ public class StringConditions extends Conditions {
 
     public void startWith(@NonNull String prefix) {
         assertCondition(partialAssertionErrorMessage() + "to start with '" + prefix + "'.", () -> {
-            final String testedActual = ignoreCase ? Optional.ofNullable(actual).orElse("").toLowerCase() : Optional.ofNullable(actual).orElse("");
+            final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? prefix.toLowerCase() : prefix;
 
             return actual != null && negated != testedActual.startsWith(testedExpected);
@@ -50,7 +49,7 @@ public class StringConditions extends Conditions {
 
     public void endWith(@NonNull String suffix) {
         assertCondition(partialAssertionErrorMessage() + "to end with '" + suffix + "'.", () -> {
-            final String testedActual = ignoreCase ? Optional.ofNullable(actual).orElse("").toLowerCase() : Optional.ofNullable(actual).orElse("");
+            final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? suffix.toLowerCase() : suffix;
 
             return actual != null && negated != testedActual.endsWith(testedExpected);

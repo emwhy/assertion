@@ -15,11 +15,11 @@ import java.util.Collection;
  * @see org.emw.assertion.date.DateAssertor
  */
 public interface CollectionAssertor {
-    default CollectionTo expect(@Nullable Object[] actual) {
+    default CollectionTo expect(@Nullable Object @Nullable[] actual) {
         return expect("", actual);
     }
 
-    default CollectionTo expect(@NonNull String labelForActual, @Nullable Object[] actual) {
+    default CollectionTo expect(@NonNull String labelForActual, @Nullable Object @Nullable[] actual) {
         return new CollectionTo(null, labelForActual, actual == null ? null : Arrays.stream(actual).toList(), false, false, false);
     }
 

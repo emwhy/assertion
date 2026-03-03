@@ -7,7 +7,7 @@ import org.emw.assertion.Conditions;
 
 public class NumberConditions extends Conditions {
     public final NumberBeConditions be;
-    private final Number actual;
+    private final @Nullable Number actual;
 
     NumberConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual, negated, false);
@@ -33,7 +33,9 @@ public class NumberConditions extends Conditions {
 
     public void be(@NonNull Number expected) {
         assertCondition(partialAssertionErrorMessage() + "to equal '" + expected + "'.", () -> {
-            if (actual instanceof Float || expected instanceof Float) {
+            if (actual == null) {
+                return false;
+            } else if (actual instanceof Float || expected instanceof Float) {
                 return (actual.floatValue() == expected.floatValue()) != negated;
             } else {
                 return (actual.doubleValue() == expected.doubleValue()) != negated;

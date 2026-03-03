@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public final class StringBeConditions extends Conditions {
-    private final String actual;
+    private final @Nullable String actual;
 
     StringBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual, negated, ignoreCase);
@@ -24,7 +24,7 @@ public final class StringBeConditions extends Conditions {
 
     public void oneOf(Collection<String> expectedTexts) {
         assertCondition(partialAssertionErrorMessage() + "to be one of '" + String.join("', '", expectedTexts) + "'.", () -> {
-            final String testedActual = ignoreCase ? Optional.ofNullable(actual).orElse("").toLowerCase() : Optional.ofNullable(actual).orElse("");
+            final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final Collection<String> testedExpectedTexts = ignoreCase ? expectedTexts.stream().map(String::toLowerCase).toList() : expectedTexts;
 
             return (actual != null && testedExpectedTexts.contains(testedActual)) != negated;

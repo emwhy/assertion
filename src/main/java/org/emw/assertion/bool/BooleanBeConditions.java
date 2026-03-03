@@ -6,7 +6,7 @@ import org.emw.assertion.AssertionGroup;
 import org.emw.assertion.Conditions;
 
 public final class BooleanBeConditions extends Conditions {
-    private final Boolean actual;
+    private final @Nullable Boolean actual;
 
     BooleanBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Boolean actual, boolean negated) {
         super(group, labelForActual, negated, false);

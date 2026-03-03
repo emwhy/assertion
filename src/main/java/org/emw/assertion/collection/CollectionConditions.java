@@ -12,7 +12,7 @@ import java.util.List;
 public class CollectionConditions extends Conditions {
     public final CollectionBeConditions be;
 
-    private final Collection<?> actualCollection;
+    private final @Nullable Collection<?> actualCollection;
     private final boolean anyOrder;
 
     CollectionConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
@@ -22,8 +22,7 @@ public class CollectionConditions extends Conditions {
         this.be = new CollectionBeConditions(group, labelForActual, actual, negated, ignoreCase, anyOrder);
     }
 
-
-    public void be(Object[] expected) {
+    public void be(Object... expected) {
         this.be(Arrays.asList(expected));
     }
 
@@ -33,8 +32,8 @@ public class CollectionConditions extends Conditions {
                 if (actualCollection == null) {
                     return false;
                 } else {
-                    final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o.toString().toLowerCase()).sorted().toList() : actualCollection.stream().map(Object::toString).sorted().toList();
-                    final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o.toString().toLowerCase()).sorted().toList() : expectedCollection.stream().map(Object::toString).sorted().toList();
+                    final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).sorted().toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).sorted().toList();
+                    final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).sorted().toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).sorted().toList();
 
                     if (testActualList.size() != testedExpectedList.size()) {
                         return negated;
@@ -53,8 +52,8 @@ public class CollectionConditions extends Conditions {
                 if (actualCollection == null) {
                     return false;
                 } else {
-                    final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o.toString().toLowerCase()).toList() : actualCollection.stream().map(Object::toString).toList();
-                    final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o.toString().toLowerCase()).toList() : expectedCollection.stream().map(Object::toString).toList();
+                    final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
+                    final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
 
                     if (testActualList.size() != testedExpectedList.size()) {
                         return negated;
@@ -90,8 +89,8 @@ public class CollectionConditions extends Conditions {
             if (actualCollection == null) {
                 return false;
             } else {
-                final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o.toString().toLowerCase()).toList() : actualCollection.stream().map(Object::toString).toList();
-                final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o.toString().toLowerCase()).toList() : expectedCollection.stream().map(Object::toString).toList();
+                final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
+                final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
 
                 for (String expected : testedExpectedList) {
                     if (!testActualList.contains(expected)) {
@@ -115,11 +114,11 @@ public class CollectionConditions extends Conditions {
         }
     }
 
-    private String join(Collection<?> collection) {
+    private String join(@Nullable Collection<?> collection) {
         if (collection == null) {
             return "null";
         } else {
-            return "'" + String.join(", ", collection.stream().map(Object::toString).toList()) + "'";
+            return "'" + String.join(", ", collection.stream().map(o -> o == null ? "null" : o.toString()).toList()) + "'";
         }
     }
 }

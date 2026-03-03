@@ -4,10 +4,21 @@ plugins {
 }
 
 group = "emw-assertion"
-version = "1.0-SNAPSHOT"
+version = "release"
 
 repositories {
     mavenCentral()
+}
+
+java {
+    withJavadocJar()
+}
+
+checkerFramework {
+    this.checkers = listOf(
+        "org.checkerframework.checker.nullness.NullnessChecker",
+        "org.checkerframework.checker.optional.OptionalChecker"
+    )
 }
 
 dependencies {

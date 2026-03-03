@@ -97,11 +97,11 @@ public class AssertionTest implements Assertor {
         final String[] emptyArray = new String[0];
         final String[] nullArray = null;
 
-        expect("Test 1", new String[] { "test1", "test2" }).to.be(new String[] { "test1", "test2" });
-        expect("Test 2", new String[] { "test1", "test2" }).to.inAnyOrder.be(new String[] { "test2", "test1" });
+        expect("Test 1", new String[] { "test1", "test2" }).to.be("test1", "test2");
+        expect("Test 2", new String[] { "test1", "test2" }).to.inAnyOrder.be("test2", "test1");
         expect("Test 3", new String[] { "test1", "test2" }).to.have("test2", "test1");
-        expect("Test 4", new String[] { "test1", "test2" }).to.caseInsensitively.be(new String[] { "Test1", "test2" });
-        expect("Test 5", new String[] { "test1", "test2" }).to.caseInsensitively.inAnyOrder.be(new String[] { "Test2", "test1" });
+        expect("Test 4", new String[] { "test1", "test2" }).to.caseInsensitively.be("Test1", "test2");
+        expect("Test 5", new String[] { "test1", "test2" }).to.caseInsensitively.inAnyOrder.be("Test2", "test1");
         expect("Test 6", new String[] { "test1", "test2" }).to.caseInsensitively.have("Test2");
         expect("Test 7", new String[] { "test1", "test2" }).to.haveSizeOf(2);
         expect("Test 8", emptyArray).to.be.empty();
@@ -109,9 +109,9 @@ public class AssertionTest implements Assertor {
         expect("Test 10", new String[] { "test1", "test2" }).to.not.be.empty();
         expect("Test 11", emptyArray).to.not.be.nullValue();
 
-        expectError(() -> expect("Test 12", new String[] { "test1", "test2" }).to.be(new String[] { "Test1", "test2" }));
-        expectError(() -> expect("Test 13", new String[] { "test1", "test2" }).to.not.be(new String[] { "test1", "test2" }));
-        expectError(() -> expect("Test 14", new String[] { "test1", "test2" }).to.inAnyOrder.be(new String[] { "Test2", "test1" }));
+        expectError(() -> expect("Test 12", new String[] { "test1", "test2" }).to.be("Test1", "test2"));
+        expectError(() -> expect("Test 13", new String[] { "test1", "test2" }).to.not.be("test1", "test2"));
+        expectError(() -> expect("Test 14", new String[] { "test1", "test2" }).to.inAnyOrder.be("Test2", "test1"));
         expectError(() -> expect("Test 15", new String[] { "test1", "test2" }).to.have("Test2"));
         expectError(() -> expect("Test 16", new String[] { "test1", "test2" }).to.have("test1", "test2", "test3"));
         expectError(() -> expect("Test 17", new String[] { "test1", "test2" }).to.haveSizeOf(1));
@@ -236,7 +236,7 @@ public class AssertionTest implements Assertor {
         try {
             action.expectAssertionError();
         } catch (AssertionError ex) {
-            if (!ex.getMessage().equals(errorMessage)) {
+            if (ex.getMessage() == null || !ex.getMessage().equals(errorMessage)) {
                 throw new AssertionError("Unexpected AssertionError message. Actual: [" + ex.getMessage() + "] Expected: [" + errorMessage + "]");
             }
             return;

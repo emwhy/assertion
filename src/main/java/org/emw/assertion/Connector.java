@@ -4,8 +4,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Connector {
-    protected final String labelForActual;
-    protected final AssertionGroup group;
+    protected final @NonNull String labelForActual;
+    protected final @Nullable AssertionGroup group;
 
     protected Connector(@Nullable AssertionGroup group, @NonNull String labelForActual) {
         this.group = group;

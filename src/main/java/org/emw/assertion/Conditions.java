@@ -28,6 +28,8 @@ public abstract class Conditions extends Connector {
     }
 
     protected final void addToGroup(Throwable throwable) {
-        this.group.addThrowable(throwable);
+        if (this.group != null) {
+            this.group.addThrowable(throwable);
+        }
     }
 }

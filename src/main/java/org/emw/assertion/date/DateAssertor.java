@@ -1,6 +1,7 @@
 package org.emw.assertion.date;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -22,11 +23,11 @@ public interface DateAssertor {
         return expect("", actual);
     }
 
-    default DateTo expect(@NonNull String labelForActual, @NonNull Date actual) {
-        return expect(labelForActual, actual.toLocalDate());
+    default DateTo expect(@NonNull String labelForActual, @Nullable Date actual) {
+        return expect(labelForActual, actual == null ? null : actual.toLocalDate());
     }
 
-    default DateTo expect(@NonNull String labelForActual, @NonNull LocalDate actual) {
+    default DateTo expect(@NonNull String labelForActual, @Nullable LocalDate actual) {
         return new DateTo(null, labelForActual, actual, false);
     }
 }

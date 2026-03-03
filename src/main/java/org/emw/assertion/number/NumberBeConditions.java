@@ -6,9 +6,9 @@ import org.emw.assertion.AssertionGroup;
 import org.emw.assertion.Conditions;
 
 public final class NumberBeConditions extends Conditions {
-    private final Number actual;
+    private final @Nullable Number actual;
 
-    NumberBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @NonNull Number actual, boolean negated) {
+    NumberBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actual = actual;
     }

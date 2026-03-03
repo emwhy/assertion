@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateBeConditions extends Conditions {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final LocalDate actual;
+    private final @Nullable LocalDate actual;
 
     protected DateBeConditions(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actual, boolean negated) {
         super(group, labelForActual, negated, false);
@@ -24,7 +24,11 @@ public class DateBeConditions extends Conditions {
 
     public void sameDate(@NonNull LocalDate expected) {
         assertCondition(partialAssertionErrorMessage() + "to be the same date as '" + expected.format(FORMATTER) + "'.", () -> {
-            return actual.isEqual(expected) != negated;
+            if (actual == null) {
+                return false;
+            } else {
+                return actual.isEqual(expected) != negated;
+            }
         });
     }
 
@@ -34,7 +38,11 @@ public class DateBeConditions extends Conditions {
 
     public void before(@NonNull LocalDate expected) {
         assertCondition(partialAssertionErrorMessage() + "to be before '" + expected.format(FORMATTER) + "'.", () -> {
-            return actual.isBefore(expected) != negated;
+            if (actual == null) {
+                return false;
+            } else {
+                return actual.isBefore(expected) != negated;
+            }
         });
     }
 
@@ -44,7 +52,11 @@ public class DateBeConditions extends Conditions {
 
     public void after(@NonNull LocalDate expected) {
         assertCondition(partialAssertionErrorMessage() + "to be after '" + expected.format(FORMATTER) + "'.", () -> {
-            return actual.isAfter(expected) != negated;
+            if (actual == null) {
+                return false;
+            } else {
+                return actual.isAfter(expected) != negated;
+            }
         });
     }
 
@@ -54,7 +66,11 @@ public class DateBeConditions extends Conditions {
 
     public void sameOrBefore(@NonNull LocalDate expected) {
         assertCondition(partialAssertionErrorMessage() + "to be the same or before '" + expected.format(FORMATTER) + "'.", () -> {
-            return actual.isEqual(expected) || actual.isBefore(expected);
+            if (actual == null) {
+                return false;
+            } else {
+                return actual.isEqual(expected) || actual.isBefore(expected);
+            }
         });
     }
 
@@ -64,7 +80,11 @@ public class DateBeConditions extends Conditions {
 
     public void sameOrAfter(@NonNull LocalDate expected) {
         assertCondition(partialAssertionErrorMessage() + "to be the same or after '" + expected.format(FORMATTER) + "'.", () -> {
-            return (actual.isEqual(expected) || actual.isAfter(expected)) != negated;
+            if  (actual == null) {
+                return false;
+            } else {
+                return (actual.isEqual(expected) || actual.isAfter(expected)) != negated;
+            }
         });
     }
 
@@ -74,7 +94,11 @@ public class DateBeConditions extends Conditions {
 
     public void between(@NonNull LocalDate start, @NonNull LocalDate end) {
         assertCondition(partialAssertionErrorMessage() + "to be between '" + start.format(FORMATTER) + "' and '" + end.format(FORMATTER) + "'.", () -> {
-            return (actual.isEqual(start) || (actual.isAfter(start) && actual.isBefore(end)) || actual.isEqual(end)) != negated;
+            if (actual == null) {
+                return false;
+            } else {
+                return (actual.isEqual(start) || (actual.isAfter(start) && actual.isBefore(end)) || actual.isEqual(end)) != negated;
+            }
         });
     }
 
