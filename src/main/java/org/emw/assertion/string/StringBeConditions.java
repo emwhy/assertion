@@ -7,7 +7,6 @@ import org.emw.assertion.Conditions;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
 public final class StringBeConditions extends Conditions {
     private final @Nullable String actual;

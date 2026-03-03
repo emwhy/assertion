@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AssertionTest implements Assertor {
     @Test
@@ -126,33 +127,69 @@ public class AssertionTest implements Assertor {
 
     @Test
     public void testDate() {
+        final LocalDate testDate = LocalDate.of(2020, 1, 1);
         final LocalDate nullDate = null;
 
-        expect("Test 1", LocalDate.of(2020, 1, 1)).to.be.sameDate(LocalDate.of(2020, 1, 1));
-        expect("Test 2", LocalDate.of(2020, 1, 1)).to.not.be.sameDate(LocalDate.of(2020, 1, 2));
-        expect("Test 3", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2019, 12, 31));
-        expect("Test 4", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2020, 1, 2));
-        expect("Test 5", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2020, 1, 1));
-        expect("Test 6", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2020, 1, 2));
-        expect("Test 7", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2020, 1, 1));
-        expect("Test 8", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2019, 12, 31));
-        expect("Test 9", LocalDate.of(2020, 1, 1)).to.be.between(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 2));
+        expect("Test 1", testDate).to.be.sameDateAs(LocalDate.of(2020, 1, 1));
+        expect("Test 2", testDate).to.not.be.sameDateAs(LocalDate.of(2020, 1, 2));
+        expect("Test 3", testDate).to.be.after(LocalDate.of(2019, 12, 31));
+        expect("Test 4", testDate).to.be.before(LocalDate.of(2020, 1, 2));
+        expect("Test 5", testDate).to.be.sameOrBefore(LocalDate.of(2020, 1, 1));
+        expect("Test 6", testDate).to.be.sameOrBefore(LocalDate.of(2020, 1, 2));
+        expect("Test 7", testDate).to.be.sameOrAfter(LocalDate.of(2020, 1, 1));
+        expect("Test 8", testDate).to.be.sameOrAfter(LocalDate.of(2019, 12, 31));
+        expect("Test 9", testDate).to.be.between(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 2));
         expect("Test 10", nullDate).to.be.nullValue();
         expect("Test 11", LocalDate.now()).to.not.be.nullValue();
 
-        expectError(() -> expect("Test 12", LocalDate.of(2020, 1, 1)).to.be.sameDate(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 12' to be the same date as '2020-01-02'.");
-        expectError(() -> expect("Test 13", LocalDate.of(2020, 1, 1)).to.not.be.sameDate(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 13' not to be the same date as '2020-01-01'.");
-        expectError(() -> expect("Test 14", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 14' to be after '2020-01-01'.");
-        expectError(() -> expect("Test 15", LocalDate.of(2020, 1, 1)).to.be.after(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 15' to be after '2020-01-02'.");
-        expectError(() -> expect("Test 16", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 16' to be before '2020-01-01'.");
-        expectError(() -> expect("Test 17", LocalDate.of(2020, 1, 1)).to.be.before(LocalDate.of(2019, 12, 31)), "Expected actual value('2020-01-01') of 'Test 17' to be before '2019-12-31'.");
-        expectError(() -> expect("Test 18", LocalDate.of(2020, 1, 1)).to.be.sameOrBefore(LocalDate.of(2019, 12, 31)), "Expected actual value('2020-01-01') of 'Test 18' to be the same or before '2019-12-31'.");
-        expectError(() -> expect("Test 19", LocalDate.of(2020, 1, 1)).to.be.sameOrAfter(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 19' to be the same or after '2020-01-02'.");
+        expectError(() -> expect("Test 12", testDate).to.be.sameDateAs(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 12' to be the same date as '2020-01-02'.");
+        expectError(() -> expect("Test 13", testDate).to.not.be.sameDateAs(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 13' not to be the same date as '2020-01-01'.");
+        expectError(() -> expect("Test 14", testDate).to.be.after(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 14' to be after '2020-01-01'.");
+        expectError(() -> expect("Test 15", testDate).to.be.after(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 15' to be after '2020-01-02'.");
+        expectError(() -> expect("Test 16", testDate).to.be.before(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01') of 'Test 16' to be before '2020-01-01'.");
+        expectError(() -> expect("Test 17", testDate).to.be.before(LocalDate.of(2019, 12, 31)), "Expected actual value('2020-01-01') of 'Test 17' to be before '2019-12-31'.");
+        expectError(() -> expect("Test 18", testDate).to.be.sameOrBefore(LocalDate.of(2019, 12, 31)), "Expected actual value('2020-01-01') of 'Test 18' to be the same or before '2019-12-31'.");
+        expectError(() -> expect("Test 19", testDate).to.be.sameOrAfter(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01') of 'Test 19' to be the same or after '2020-01-02'.");
         expectError(() -> expect("Test 20", LocalDate.of(2020, 1, 3)).to.be.between(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-03') of 'Test 20' to be between '2020-01-01' and '2020-01-02'.");
         expectError(() -> expect("Test 21", LocalDate.of(2020, 1, 5)).to.be.between(LocalDate.of(2019, 12, 31), LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-05') of 'Test 21' to be between '2019-12-31' and '2020-01-01'.");
-        expectError(() -> expect("Test 22", LocalDate.of(2020, 1, 1)).to.be.between(LocalDate.of(2020, 1, 2), LocalDate.of(2021, 1, 1)), "Expected actual value('2020-01-01') of 'Test 22' to be between '2020-01-02' and '2021-01-01'.");
+        expectError(() -> expect("Test 22", testDate).to.be.between(LocalDate.of(2020, 1, 2), LocalDate.of(2021, 1, 1)), "Expected actual value('2020-01-01') of 'Test 22' to be between '2020-01-02' and '2021-01-01'.");
         expectError(() -> expect("Test 23", LocalDate.now()).to.be.nullValue(), "Expected actual value('2026-03-03') of 'Test 23' to be null.");
         expectError(() -> expect("Test 24", nullDate).to.not.be.nullValue(), "Expected actual value('null') of 'Test 24' not to be null.");
+    }
+
+    @Test
+    public void testDateTime() {
+        final LocalDateTime testDateTime = LocalDateTime.of(2020, 1, 1, 0, 0);
+        final LocalDateTime nullDateTime = null;
+
+        expect("Test 1", testDateTime).to.be.sameDateAs(LocalDate.of(2020, 1, 1));
+        expect("Test 2", testDateTime).to.be.sameDateAs(LocalDateTime.of(2020, 1, 1, 12, 12));
+        expect("Test 3", testDateTime).to.not.be.sameDateAs(LocalDate.of(2020, 1, 2));
+        expect("Test 4", testDateTime).to.be(LocalDateTime.of(2020, 1, 1, 0, 0));
+        expect("Test 5", testDateTime).to.not.be(LocalDateTime.of(2020, 1, 1, 12, 12));
+        expect("Test 6", testDateTime).to.be.after(LocalDateTime.of(2019, 12, 31, 23, 59));
+        expect("Test 7", testDateTime).to.be.before(LocalDateTime.of(2020, 1, 2, 0, 0));
+        expect("Test 8", testDateTime).to.be.sameOrBefore(LocalDateTime.of(2020, 1, 1, 0, 0));
+        expect("Test 9", testDateTime).to.be.sameOrBefore(LocalDateTime.of(2020, 1, 1, 1, 1));
+        expect("Test 10", testDateTime).to.be.sameOrAfter(LocalDateTime.of(2020, 1, 1, 0, 0));
+        expect("Test 11", testDateTime).to.be.sameOrAfter(LocalDateTime.of(2019, 12, 31, 23, 59));
+        expect("Test 12", testDateTime).to.be.between(LocalDateTime.of(2019, 12, 31, 23, 59), LocalDateTime.of(2020, 1, 1, 0, 0, 1));
+        expect("Test 13", nullDateTime).to.be.nullValue();
+        expect("Test 14", LocalDate.now()).to.not.be.nullValue();
+
+        expectError(() -> expect("Test 15", testDateTime).to.be.sameDateAs(LocalDate.of(2020, 1, 2)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 15' to be the same date as '2020-01-02'.");
+        expectError(() -> expect("Test 16", testDateTime).to.not.be.sameDateAs(LocalDate.of(2020, 1, 1)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 16' not to be the same date as '2020-01-01'.");
+        expectError(() -> expect("Test 17", testDateTime).to.be.after(LocalDateTime.of(2020, 1, 1, 0, 0)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 17' to be after '2020-01-01 00:00:00.000'.");
+        expectError(() -> expect("Test 18", testDateTime).to.be.after(LocalDateTime.of(2020, 1, 2, 1, 1)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 18' to be after '2020-01-02 01:01:00.000'.");
+        expectError(() -> expect("Test 19", testDateTime).to.be.before(LocalDateTime.of(2020, 1, 1, 0, 0)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 19' to be before '2020-01-01 00:00:00.000'.");
+        expectError(() -> expect("Test 20", testDateTime).to.be.before(LocalDateTime.of(2019, 12, 31, 23, 59)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 20' to be before '2019-12-31 23:59:00.000'.");
+        expectError(() -> expect("Test 21", testDateTime).to.be.sameOrBefore(LocalDateTime.of(2019, 12, 31, 23, 59)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 21' to be the same or before '2019-12-31 23:59:00.000'.");
+        expectError(() -> expect("Test 22", testDateTime).to.be.sameOrAfter(LocalDateTime.of(2020, 1, 1, 0, 1)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 22' to be the same or after '2020-01-01 00:01:00.000'.");
+        expectError(() -> expect("Test 23", LocalDateTime.of(2020, 1, 3, 0, 0)).to.be.between(LocalDateTime.of(2020, 1, 1, 0, 0), LocalDateTime.of(2020, 1, 2, 0, 0)), "Expected actual value('2020-01-03 00:00:00.000') of 'Test 23' to be between '2020-01-01 00:00:00.000' and '2020-01-02 00:00:00.000'.");
+        expectError(() -> expect("Test 24", LocalDateTime.of(2020, 1, 5, 0, 0)).to.be.between(LocalDateTime.of(2019, 12, 31, 0, 0), LocalDateTime.of(2020, 1, 1, 0, 0)), "Expected actual value('2020-01-05 00:00:00.000') of 'Test 24' to be between '2019-12-31 00:00:00.000' and '2020-01-01 00:00:00.000'.");
+        expectError(() -> expect("Test 25", testDateTime).to.be.between(LocalDateTime.of(2020, 1, 2, 0, 0), LocalDateTime.of(2021, 1, 1, 0, 0)), "Expected actual value('2020-01-01 00:00:00.000') of 'Test 25' to be between '2020-01-02 00:00:00.000' and '2021-01-01 00:00:00.000'.");
+        expectError(() -> expect("Test 26", LocalDateTime.of(5, 5, 5, 5, 5)).to.be.nullValue(), "Expected actual value('0005-05-05 05:05:00.000') of 'Test 26' to be null.");
+        expectError(() -> expect("Test 27", nullDateTime).to.not.be.nullValue(), "Expected actual value('null') of 'Test 27' not to be null.");
     }
 
     @Test
@@ -226,7 +263,7 @@ public class AssertionTest implements Assertor {
             action.expectAssertionError();
         } catch (AssertionError ex) {
             if (errorMessage.isEmpty()) {
-                System.out.println("Error message = \"" + ex.getMessage() + "\"");
+                System.out.println("Error message = , \"" + ex.getMessage() + "\"");
             } else {
                 if (ex.getMessage() == null || !ex.getMessage().equals(errorMessage)) {
                     throw new AssertionError("Unexpected AssertionError message. Actual: [" + ex.getMessage() + "] Expected: [" + errorMessage + "]");

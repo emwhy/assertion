@@ -5,7 +5,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionGroup;
 import org.emw.assertion.Conditions;
 
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class StringConditions extends Conditions {

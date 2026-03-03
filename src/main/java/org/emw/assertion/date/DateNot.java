@@ -10,8 +10,8 @@ import java.time.LocalDate;
 public class DateNot extends Connector {
     public final DateBeConditions be;
 
-    protected DateNot(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actual, boolean negated) {
+    protected DateNot(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actualLocalDate, boolean negated) {
         super(group, labelForActual);
-        this.be = new DateBeConditions(group, labelForActual, actual, negated);
+        this.be = new DateBeConditions(group, labelForActual, actualLocalDate, negated);
     }
 }

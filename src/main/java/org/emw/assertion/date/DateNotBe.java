@@ -11,9 +11,9 @@ public class DateNotBe extends Connector {
     public final DateBeConditions be;
     public final DateNot not;
 
-    protected DateNotBe(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actual, boolean negated) {
+    protected DateNotBe(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDate actualLocalDate, boolean negated) {
         super(group, labelForActual);
-        this.be = new DateBeConditions(group, labelForActual, actual, negated);
-        this.not = new DateNot(group, labelForActual, actual, !negated);
+        this.be = new DateBeConditions(group, labelForActual, actualLocalDate, negated);
+        this.not = new DateNot(group, labelForActual, actualLocalDate, !negated);
     }
 }

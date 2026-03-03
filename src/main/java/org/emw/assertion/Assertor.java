@@ -4,6 +4,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emw.assertion.bool.BooleanAssertor;
 import org.emw.assertion.collection.CollectionAssertor;
 import org.emw.assertion.date.DateAssertor;
+import org.emw.assertion.datetime.DateTimeAssertor;
 import org.emw.assertion.number.NumberAssertor;
 import org.emw.assertion.string.StringAssertor;
 
@@ -31,8 +32,9 @@ import org.emw.assertion.string.StringAssertor;
  * @see DateAssertor
  * @see NumberAssertor
  * @see AssertionGroup
+ * @see DateTimeAssertor
  */
-public interface Assertor extends StringAssertor, CollectionAssertor, BooleanAssertor, DateAssertor, NumberAssertor {
+public interface Assertor extends StringAssertor, CollectionAssertor, BooleanAssertor, DateAssertor, NumberAssertor, DateTimeAssertor {
     default void assertionGroup(AssertionGroup.@NonNull GroupAction action) {
         assertionGroup("", action);
     }
