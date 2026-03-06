@@ -10,10 +10,12 @@ import java.util.Collection;
 
 public final class StringBeAssertionMethods extends AssertionMethods {
     private final @Nullable String actual;
+    private final StringAssertorHelper helper;
 
     StringBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable String actual, boolean negated, boolean ignoreCase) {
         super(group, labelForActual, negated, ignoreCase);
         this.actual = actual;
+        this.helper = new StringAssertorHelper(labelForActual, actual, negated, ignoreCase);
     }
 
 
@@ -22,7 +24,7 @@ public final class StringBeAssertionMethods extends AssertionMethods {
     }
 
     public void oneOf(Collection<String> expectedTexts) {
-        assertCondition(partialAssertionErrorMessage() + "to be one of '" + String.join("', '", expectedTexts) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be one of '" + String.join("', '", expectedTexts) + "'"), () -> {
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final Collection<String> testedExpectedTexts = ignoreCase ? expectedTexts.stream().map(String::toLowerCase).toList() : expectedTexts;
 
@@ -31,27 +33,15 @@ public final class StringBeAssertionMethods extends AssertionMethods {
     }
 
     public void empty() {
-        assertCondition(partialAssertionErrorMessage() + "to be empty.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be empty"), () -> {
             return actual != null && negated != actual.isEmpty();
         });
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
             return negated != (actual == null);
         });
-    }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty() && ignoreCase) {
-            return "Ignoring cases, expected '" + actual + "'" + (negated?" not":"") + " ";
-        } else if (labelForActual.isEmpty() && !ignoreCase) {
-            return "Expected '" + actual + "'" + (negated?" not":"") + " ";
-        } else if (ignoreCase) {
-            return "Ignoring cases, expected actual value('" + actual + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + actual + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
     }
 
 }

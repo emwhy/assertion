@@ -13,14 +13,16 @@ import java.time.format.DateTimeFormatter;
 public class TimeBeAssertionMethods extends AssertionMethods {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private final @Nullable LocalTime actualLocalTime;
+    private final TimeAssertorHelper helper;
 
     protected TimeBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalTime actualLocalTime, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actualLocalTime = actualLocalTime;
+        this.helper = new TimeAssertorHelper(labelForActual, actualLocalTime, negated, TIME_FORMATTER);
     }
 
     public void before(@NonNull LocalTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be before '" + expected.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be before '" + expected.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -30,7 +32,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void after(@NonNull LocalTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be after '" + expected.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be after '" + expected.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -40,7 +42,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void sameOrBefore(@NonNull LocalTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be the same or before '" + expected.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be the same or before '" + expected.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -50,7 +52,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void sameOrAfter(@NonNull LocalTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be the same or after '" + expected.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be the same or after '" + expected.format(TIME_FORMATTER) + "'"), () -> {
             if  (actualLocalTime == null) {
                 return false;
             } else {
@@ -60,7 +62,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
     }
     
     public void between(@NonNull LocalTime start, @NonNull LocalTime end) {
-        assertCondition(partialAssertionErrorMessage() + "to be between '" + start.format(TIME_FORMATTER) + "' and '" + end.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be between '" + start.format(TIME_FORMATTER) + "' and '" + end.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -73,7 +75,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
         final LocalTime now = LocalTime.now();
         final LocalTime targetDateTime = now.minusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be within past " + hours + " hours from '" +  now.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be within past " + hours + " hours from '" +  now.format(TIME_FORMATTER) + "'"), () -> {
             if  (actualLocalTime == null) {
                 return false;
             } else {
@@ -86,7 +88,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
         final LocalTime now = LocalTime.now();
         final LocalTime targetDateTime = now.plusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + hours + " hours in future from '" + now.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + hours + " hours in future from '" + now.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -99,7 +101,7 @@ public class TimeBeAssertionMethods extends AssertionMethods {
         final LocalTime now = LocalTime.now();
         final LocalTime targetDateTime = now.minusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + hours + " hours in past from '" + now.format(TIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + hours + " hours in past from '" + now.format(TIME_FORMATTER) + "'"), () -> {
             if (actualLocalTime == null) {
                 return false;
             } else {
@@ -109,17 +111,9 @@ public class TimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
             return negated != (actualLocalTime == null);
         });
-    }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty()) {
-            return "Expected '" + (actualLocalTime == null ? "null" : actualLocalTime.format(TIME_FORMATTER)) + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + (actualLocalTime == null ? "null" : actualLocalTime.format(TIME_FORMATTER)) + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
     }
 
 }

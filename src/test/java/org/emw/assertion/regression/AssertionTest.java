@@ -14,74 +14,75 @@ import java.time.format.DateTimeFormatter;
 public class AssertionTest implements Assertor {
     @Test
     public void testString() {
+        final String testString = "test";
         final String nullString = null;
         
-        expect("Test 1", "test").to.startWith("te");
-        expect("Test 2", "test").to.caseInsensitively.startWith("TES");
-        expect("Test 3", "test").to.not.startWith("es");
-        expect("Test 4", "test").to.caseInsensitively.not.startWith("ES");
+        expect("Test 1", testString).to.startWith("te");
+        expect("Test 2", testString).to.caseInsensitively.startWith("TES");
+        expect("Test 3", testString).to.not.startWith("es");
+        expect("Test 4", testString).to.caseInsensitively.not.startWith("ES");
 
-        expect("Test 5", "test").to.endWith("st");
-        expect("Test 6", "test").to.caseInsensitively.endWith("ST");
-        expect("Test 7", "test").to.not.endWith("es");
-        expect("Test 8", "test").to.caseInsensitively.not.endWith("ES");
+        expect("Test 5", testString).to.endWith("st");
+        expect("Test 6", testString).to.caseInsensitively.endWith("ST");
+        expect("Test 7", testString).to.not.endWith("es");
+        expect("Test 8", testString).to.caseInsensitively.not.endWith("ES");
 
-        expect("Test 9", "test").to.be("test");
-        expect("Test 10", "test").to.caseInsensitively.be("TEST");
-        expect("Test 11", "test").to.not.be("es");
-        expect("Test 12", "test").to.caseInsensitively.not.be("ES");
+        expect("Test 9", testString).to.be(testString);
+        expect("Test 10", testString).to.caseInsensitively.be(testString);
+        expect("Test 11", testString).to.not.be("es");
+        expect("Test 12", testString).to.caseInsensitively.not.be("ES");
 
-        expect("Test 13", "test").to.contain("es");
-        expect("Test 14", "test").to.caseInsensitively.contain("ES");
-        expect("Test 15", "test").to.not.contain("estt");
-        expect("Test 16", "test").to.caseInsensitively.not.contain("ESTT");
+        expect("Test 13", testString).to.contain("es");
+        expect("Test 14", testString).to.caseInsensitively.contain("ES");
+        expect("Test 15", testString).to.not.contain("estt");
+        expect("Test 16", testString).to.caseInsensitively.not.contain("ESTT");
 
-        expect("Test 17", "test").to.match("\\w+");
-        expect("Test 18", "test").to.not.match("\\d+");
+        expect("Test 17", testString).to.match("\\w+");
+        expect("Test 18", testString).to.not.match("\\d+");
 
-        expect("Test 19", "test").to.be.oneOf("test", "test2", "test3");
-        expect("Test 20", "test").to.caseInsensitively.be.oneOf("TEST", "TEST2", "TEST3");
-        expect("Test 21", "test").to.not.be.oneOf("TEST", "TEST2", "TEST3");
-        expect("Test 22", "test").to.caseInsensitively.not.be.oneOf("TEST1", "TEST2", "TEST3");
+        expect("Test 19", testString).to.be.oneOf("test", "test2", "test3");
+        expect("Test 20", testString).to.caseInsensitively.be.oneOf("TEST", "TEST2", "TEST3");
+        expect("Test 21", testString).to.not.be.oneOf("TEST", "TEST2", "TEST3");
+        expect("Test 22", testString).to.caseInsensitively.not.be.oneOf("TEST1", "TEST2", "TEST3");
 
         expect("Test 23", "").to.be.empty();
-        expect("Test 24", "test").to.not.be.empty();
+        expect("Test 24", testString).to.not.be.empty();
         expect("Test 25", nullString).to.be.nullValue();
         expect("Test 26", "null").to.not.be.nullValue();
 
-        expectError(() -> expect("Test 27", "test").to.startWith("es"), "Expected actual value('test') of 'Test 27' to start with 'es'.");
+        expectError(() -> expect("Test 27", testString).to.startWith("es"), "Expected actual value('test') of 'Test 27' to start with 'es'.");
 
-        expectError(() -> expect("Test 28", "test").to.caseInsensitively.startWith("abc"), "Ignoring cases, expected actual value('test') of 'Test 28' to start with 'abc'.");
-        expectError(() -> expect("Test 29", "test").to.not.startWith("te"), "Expected actual value('test') of 'Test 29' not to start with 'te'.");
-        expectError(() -> expect("Test 30", "test").to.caseInsensitively.not.startWith("TE"), "Ignoring cases, expected actual value('test') of 'Test 30' not to start with 'TE'.");
+        expectError(() -> expect("Test 28", testString).to.caseInsensitively.startWith("abc"), "Ignoring cases, expected actual value('test') of 'Test 28' to start with 'abc'.");
+        expectError(() -> expect("Test 29", testString).to.not.startWith("te"), "Expected actual value('test') of 'Test 29' not to start with 'te'.");
+        expectError(() -> expect("Test 30", testString).to.caseInsensitively.not.startWith("TE"), "Ignoring cases, expected actual value('test') of 'Test 30' not to start with 'TE'.");
 
-        expectError(() -> expect("Test 31", "test").to.endWith("te"), "Expected actual value('test') of 'Test 31' to end with 'te'.");
-        expectError(() -> expect("Test 32", "test").to.caseInsensitively.endWith("ABC"), "Ignoring cases, expected actual value('test') of 'Test 32' to end with 'ABC'.");
-        expectError(() -> expect("Test 33", "test").to.not.endWith("st"), "Expected actual value('test') of 'Test 33' not to end with 'st'.");
-        expectError(() -> expect("Test 34", "test").to.caseInsensitively.not.endWith("ST"), "Ignoring cases, expected actual value('test') of 'Test 34' not to end with 'ST'.");
+        expectError(() -> expect("Test 31", testString).to.endWith("te"), "Expected actual value('test') of 'Test 31' to end with 'te'.");
+        expectError(() -> expect("Test 32", testString).to.caseInsensitively.endWith("ABC"), "Ignoring cases, expected actual value('test') of 'Test 32' to end with 'ABC'.");
+        expectError(() -> expect("Test 33", testString).to.not.endWith("st"), "Expected actual value('test') of 'Test 33' not to end with 'st'.");
+        expectError(() -> expect("Test 34", testString).to.caseInsensitively.not.endWith("ST"), "Ignoring cases, expected actual value('test') of 'Test 34' not to end with 'ST'.");
 
-        expectError(() -> expect("Test 35", "test").to.be("TEST"), "Expected actual value('test') of 'Test 35' to equal 'TEST'.");
-        expectError(() -> expect("Test 36", "test").to.caseInsensitively.be("abc"), "Ignoring cases, expected actual value('test') of 'Test 36' to equal 'abc'.");
-        expectError(() -> expect("Test 37", "test").to.not.be("test"), "Expected actual value('test') of 'Test 37' not to equal 'test'.");
-        expectError(() -> expect("Test 38", "test").to.caseInsensitively.not.be("TEST"), "Ignoring cases, expected actual value('test') of 'Test 38' not to equal 'TEST'.");
+        expectError(() -> expect("Test 35", testString).to.be("TEST"), "Expected actual value('test') of 'Test 35' to equal 'TEST'.");
+        expectError(() -> expect("Test 36", testString).to.caseInsensitively.be("abc"), "Ignoring cases, expected actual value('test') of 'Test 36' to equal 'abc'.");
+        expectError(() -> expect("Test 37", testString).to.not.be(testString), "Expected actual value('test') of 'Test 37' not to equal 'test'.");
+        expectError(() -> expect("Test 38", testString).to.caseInsensitively.not.be("TEST"), "Ignoring cases, expected actual value('test') of 'Test 38' not to equal 'TEST'.");
 
-        expectError(() -> expect("Test 39", "test").to.contain("abc"), "Expected actual value('test') of 'Test 39' to contain 'abc'.");
-        expectError(() -> expect("Test 40", "test").to.caseInsensitively.contain("ABC"), "Ignoring cases, expected actual value('test') of 'Test 40' to contain 'ABC'.");
-        expectError(() -> expect("Test 41", "test").to.not.contain("es"), "Expected actual value('test') of 'Test 41' not to contain 'es'.");
-        expectError(() -> expect("Test 42", "test").to.caseInsensitively.not.contain("ES"), "Ignoring cases, expected actual value('test') of 'Test 42' not to contain 'ES'.");
+        expectError(() -> expect("Test 39", testString).to.contain("abc"), "Expected actual value('test') of 'Test 39' to contain 'abc'.");
+        expectError(() -> expect("Test 40", testString).to.caseInsensitively.contain("ABC"), "Ignoring cases, expected actual value('test') of 'Test 40' to contain 'ABC'.");
+        expectError(() -> expect("Test 41", testString).to.not.contain("es"), "Expected actual value('test') of 'Test 41' not to contain 'es'.");
+        expectError(() -> expect("Test 42", testString).to.caseInsensitively.not.contain("ES"), "Ignoring cases, expected actual value('test') of 'Test 42' not to contain 'ES'.");
 
-        expectError(() -> expect("Test 43", "test").to.match("\\d+"), "Expected actual value('test') of 'Test 43' to match the pattern '\\d+'.");
-        expectError(() -> expect("Test 44", "test").to.not.match(".*st"), "Expected actual value('test') of 'Test 44' not to match the pattern '.*st'.");
+        expectError(() -> expect("Test 43", testString).to.match("\\d+"), "Expected actual value('test') of 'Test 43' to match the pattern '\\d+'.");
+        expectError(() -> expect("Test 44", testString).to.not.match(".*st"), "Expected actual value('test') of 'Test 44' not to match the pattern '.*st'.");
 
-        expectError(() -> expect("Test 45", "test").to.be.oneOf("abc", "123"), "Expected actual value('test') of 'Test 45' to be one of 'abc', '123'.");
-        expectError(() -> expect("Test 46", "test").to.caseInsensitively.be.oneOf("ABC", "123"), "Ignoring cases, expected actual value('test') of 'Test 46' to be one of 'ABC', '123'.");
-        expectError(() -> expect("Test 47", "test").to.not.be.oneOf("test", "other"), "Expected actual value('test') of 'Test 47' not to be one of 'test', 'other'.");
-        expectError(() -> expect("Test 48", "test").to.caseInsensitively.not.be.oneOf("TEST", "other"), "Ignoring cases, expected actual value('test') of 'Test 48' not to be one of 'TEST', 'other'.");
+        expectError(() -> expect("Test 45", testString).to.be.oneOf("abc", "123"), "Expected actual value('test') of 'Test 45' to be one of 'abc', '123'.");
+        expectError(() -> expect("Test 46", testString).to.caseInsensitively.be.oneOf("ABC", "123"), "Ignoring cases, expected actual value('test') of 'Test 46' to be one of 'ABC', '123'.");
+        expectError(() -> expect("Test 47", testString).to.not.be.oneOf("test", "other"), "Expected actual value('test') of 'Test 47' not to be one of 'test', 'other'.");
+        expectError(() -> expect("Test 48", testString).to.caseInsensitively.not.be.oneOf("TEST", "other"), "Ignoring cases, expected actual value('test') of 'Test 48' not to be one of 'TEST', 'other'.");
 
-        expectError(() -> expect("Test 49", "test").to.be.empty(), "Expected actual value('test') of 'Test 49' to be empty.");
+        expectError(() -> expect("Test 49", testString).to.be.empty(), "Expected actual value('test') of 'Test 49' to be empty.");
         expectError(() -> expect("Test 50", "").to.not.be.empty(),"Expected actual value('') of 'Test 50' not to be empty.");
 
-        expectError(() -> expect("Test 51", "test").to.be.nullValue(), "Expected actual value('test') of 'Test 51' to be null.");
+        expectError(() -> expect("Test 51", testString).to.be.nullValue(), "Expected actual value('test') of 'Test 51' to be null.");
         expectError(() -> expect("Test 52", nullString).to.not.be.nullValue(), "Expected actual value('null') of 'Test 52' not to be null.");
 
         expectError(() -> expect("Test 53", "   ").to.be.empty(), "Expected actual value('   ') of 'Test 53' to be empty.");
@@ -104,14 +105,14 @@ public class AssertionTest implements Assertor {
         expect("Test 10", new String[] { "test1", "test2" }).to.not.be.empty();
         expect("Test 11", emptyArray).to.not.be.nullValue();
 
-        expectError(() -> expect("Test 12", new String[] { "test1", "test2" }).to.be("Test1", "test2"), "Expected actual value('test1, test2') of 'Test 12' to be same as 'Test1, test2'.");
-        expectError(() -> expect("Test 13", new String[] { "test1", "test2" }).to.not.be("test1", "test2"), "Expected actual value('test1, test2') of 'Test 13' not to be same as 'test1, test2'.");
-        expectError(() -> expect("Test 14", new String[] { "test1", "test2" }).to.inAnyOrder.be("Test2", "test1"), "Expected actual value('test1, test2') of 'Test 14' to be same (in any order) as 'Test2, test1'.");
-        expectError(() -> expect("Test 15", new String[] { "test1", "test2" }).to.have("Test2"), "Expected actual value('test1, test2') of 'Test 15' to be same (in any order) as 'Test2'.");
-        expectError(() -> expect("Test 16", new String[] { "test1", "test2" }).to.have("test1", "test2", "test3"), "Expected actual value('test1, test2') of 'Test 16' to be same (in any order) as 'test1, test2, test3'.");
-        expectError(() -> expect("Test 17", new String[] { "test1", "test2" }).to.haveSizeOf(1), "Expected actual value('test1, test2') of 'Test 17' to have size of 1, but was 2.");
-        expectError(() -> expect("Test 18", new String[] { "test1", "test2" }).to.be.empty(), "Expected actual value('test1, test2') of 'Test 18' to be empty.");
-        expectError(() -> expect("Test 19", new String[] { "test1", "test2" }).to.be.nullValue(), "Expected actual value('test1, test2') of 'Test 19' to be null.");
+        expectError(() -> expect("Test 12", new String[] { "test1", "test2" }).to.be("Test1", "test2"), "Expected actual value('test1', 'test2') of 'Test 12' to be same as 'Test1', 'test2'.");
+        expectError(() -> expect("Test 13", new String[] { "test1", "test2" }).to.not.be("test1", "test2"), "Expected actual value('test1', 'test2') of 'Test 13' not to be same as 'test1', 'test2'.");
+        expectError(() -> expect("Test 14", new String[] { "test1", "test2" }).to.inAnyOrder.be("Test2", "test1"), "Expected actual value('test1', 'test2') of 'Test 14' to be same (in any order) as 'Test2', 'test1'.");
+        expectError(() -> expect("Test 15", new String[] { "test1", "test2" }).to.have("Test2"), "Expected actual value('test1', 'test2') of 'Test 15' to have 'Test2'.");
+        expectError(() -> expect("Test 16", new String[] { "test1", "test2" }).to.have("test1", "test2", "test3"), "Expected actual value('test1', 'test2') of 'Test 16' to have 'test1', 'test2', 'test3'.");
+        expectError(() -> expect("Test 17", new String[] { "test1", "test2" }).to.haveSizeOf(1), "Expected actual value('test1', 'test2') of 'Test 17' to have size of 1, but was 2.");
+        expectError(() -> expect("Test 18", new String[] { "test1", "test2" }).to.be.empty(), "Expected actual value('test1', 'test2') of 'Test 18' to be empty.");
+        expectError(() -> expect("Test 19", new String[] { "test1", "test2" }).to.be.nullValue(), "Expected actual value('test1', 'test2') of 'Test 19' to be null.");
     }
 
     @Test
@@ -358,16 +359,18 @@ public class AssertionTest implements Assertor {
     public void testGroup() {
         try {
             assertionGroup(g -> {
-                g.expect("test").to.be("test1");
-                g.expect("test").to.be("test2");
-                g.expect(1).to.be(1);
-                g.expect(1).to.be(0);
+                final String testString = "test";
+
+                g.expect("Test 1", testString).to.be("test1");
+                g.expect("Test 2", testString).to.be("test2");
+                g.expect("Test 3", 1).to.be(1);
+                g.expect("Test 4", 1).to.be(0);
                 g.assertWith(() -> Assert.assertEquals(1, 0));
             });
         } catch (AssertionGroupError ex) {
-            expect(ex.getMessage()).to.contain("Expected 'test' to equal 'test1'.");
-            expect(ex.getMessage()).to.contain("Expected 'test' to equal 'test2'.");
-            expect(ex.getMessage()).to.contain("Expected '1' to equal '0'.");
+            expect(ex.getMessage()).to.contain("Expected actual value('test') of 'Test 1' to equal 'test1'.");
+            expect(ex.getMessage()).to.contain("Expected actual value('test') of 'Test 2' to equal 'test2'.");
+            expect(ex.getMessage()).to.contain("Expected actual value('1') of 'Test 4' to equal '0'.");
             expect(ex.getMessage()).to.contain("expected [0] but found [1]");
         }
     }

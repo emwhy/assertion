@@ -13,15 +13,17 @@ public class DateTimeAssertionMethods extends AssertionMethods {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final @Nullable LocalDateTime actualLocalDateTime;
     public final DateTimeBeAssertionMethods be;
+    private final DateTimeAssertorHelper helper;
 
     protected DateTimeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDateTime actualLocalDateTime, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actualLocalDateTime = actualLocalDateTime;
         this.be = new DateTimeBeAssertionMethods(group, labelForActual, actualLocalDateTime, negated);
+        this.helper = new DateTimeAssertorHelper(labelForActual, actualLocalDateTime, negated, DATETIME_FORMATTER);
     }
 
     public void be(@NonNull LocalDateTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be '" + expected.format(DATE_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be '" + expected.format(DATE_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -29,13 +31,4 @@ public class DateTimeAssertionMethods extends AssertionMethods {
             }
         });
     }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty()) {
-            return "Expected '" + (actualLocalDateTime == null ? "null" : actualLocalDateTime.format(DATETIME_FORMATTER)) + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + (actualLocalDateTime == null ? "null" : actualLocalDateTime.format(DATETIME_FORMATTER)) + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
-    }
-
 }

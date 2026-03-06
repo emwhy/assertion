@@ -9,44 +9,23 @@ import java.util.Collection;
 
 public final class CollectionBeAssertionMethods extends AssertionMethods {
     private final @Nullable Collection<?> actualCollection;
-    private final boolean anyOrder;
+    private final CollectionAssertorHelper helper;
 
     CollectionBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Collection<?> actual, boolean negated, boolean ignoreCase, boolean anyOrder) {
         super(group, labelForActual, negated, ignoreCase);
         this.actualCollection = actual;
-        this.anyOrder = anyOrder;
+        this.helper = new CollectionAssertorHelper(labelForActual, actual, negated, ignoreCase);
     }
 
     public void empty() {
-        assertCondition(partialAssertionErrorMessage() + "to be empty.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be empty"), () -> {
             return actualCollection != null && negated != actualCollection.isEmpty();
         });
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
             return negated != (actualCollection == null);
         });
-    }
-
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty() && ignoreCase) {
-            return "Ignoring cases, expected " + join(actualCollection) + (negated?" not":"") + " ";
-        } else if (labelForActual.isEmpty() && !ignoreCase) {
-            return "Expected " + join(actualCollection) + (negated?" not":"") + " ";
-        } else if (ignoreCase) {
-            return "Ignoring cases, expected actual value(" + join(actualCollection) + ") of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value(" + join(actualCollection) + ") of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
-    }
-
-    private String join(@Nullable Collection<?> collection) {
-        if (collection == null) {
-            return "null";
-        } else {
-            return "'" + String.join(", ", collection.stream().map(o -> o == null ? "null" : o.toString()).toList()) + "'";
-        }
     }
 }

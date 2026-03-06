@@ -23,6 +23,7 @@ checkerFramework {
 
 dependencies {
     testImplementation("org.testng:testng:7.11.+")
+    implementation("org.json:json:20251224")
 }
 
 tasks.test {

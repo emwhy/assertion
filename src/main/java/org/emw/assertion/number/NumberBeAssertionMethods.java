@@ -7,10 +7,12 @@ import org.emw.assertion.AssertionMethods;
 
 public final class NumberBeAssertionMethods extends AssertionMethods {
     private final @Nullable Number actual;
+    private final NumberAssertorHelper helper;
 
     NumberBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actual = actual;
+        this.helper = new NumberAssertorHelper(labelForActual, actual,  negated);
     }
 
     // --- moreThan ---
@@ -20,7 +22,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void moreThan(double expected) { moreThan(Double.valueOf(expected)); }
 
     public void moreThan(@NonNull Number expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be more than '" + expected + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than '" + expected + "'"), () -> {
             if (actual == null) {
                 return false;
             } else if (actual instanceof Float || expected instanceof Float) {
@@ -38,7 +40,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void lessThan(double expected) { lessThan(Double.valueOf(expected)); }
 
     public void lessThan(@NonNull Number expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be less than '" + expected + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be less than '" + expected + "'"), () -> {
             if (actual == null) {
                 return false;
             } else if (actual instanceof Float || expected instanceof Float) {
@@ -56,7 +58,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void moreThanOrEqual(double expected) { moreThanOrEqual(Double.valueOf(expected)); }
 
     public void moreThanOrEqual(@NonNull Number expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be more than or equal '" + expected + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than or equal '" + expected + "'"), () -> {
             if (actual == null) {
                 return false;
             } else if (actual instanceof Float || expected instanceof Float) {
@@ -74,7 +76,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void lessThanOrEqual(double expected) { lessThanOrEqual(Double.valueOf(expected)); }
 
     public void lessThanOrEqual(@NonNull Number expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be less than or equal '" + expected + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be less than or equal '" + expected + "'"), () -> {
             if (actual == null) {
                 return false;
             }
@@ -92,7 +94,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     }
 
     public void between(@NonNull Number expectedLower, @NonNull Number expectedUpper) {
-        assertCondition(partialAssertionErrorMessage() + "to be between '" + expectedLower + "' and '" + expectedUpper + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be between '" + expectedLower + "' and '" + expectedUpper + "'"), () -> {
             if (actual == null) {
                 return false;
             } else if (actual instanceof Float || expectedLower instanceof Float || expectedUpper instanceof Float) {
@@ -106,17 +108,8 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
             return negated != (actual == null);
         });
     }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty()) {
-            return "Expected '" + actual + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + actual + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
-    }
-
 }

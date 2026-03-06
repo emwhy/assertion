@@ -8,11 +8,13 @@ import org.emw.assertion.AssertionMethods;
 public class NumberAssertionMethods extends AssertionMethods {
     public final NumberBeAssertionMethods be;
     private final @Nullable Number actual;
+    private final NumberAssertorHelper helper;
 
     NumberAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable Number actual, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actual = actual;
         this.be = new NumberBeAssertionMethods(group, labelForActual, actual, negated);
+        this.helper = new NumberAssertorHelper(labelForActual, actual, negated);
     }
 
     public void be(int expected) {
@@ -32,7 +34,7 @@ public class NumberAssertionMethods extends AssertionMethods {
     }
 
     public void be(@NonNull Number expected) {
-        assertCondition(partialAssertionErrorMessage() + "to equal '" + expected + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to equal '" + expected + "'"), () -> {
             if (actual == null) {
                 return false;
             } else if (actual instanceof Float || expected instanceof Float) {
@@ -42,13 +44,4 @@ public class NumberAssertionMethods extends AssertionMethods {
             }
         });
     }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty()) {
-            return "Expected '" + actual + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + actual + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
-    }
-
 }

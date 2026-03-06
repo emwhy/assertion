@@ -14,15 +14,17 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final @Nullable LocalDateTime actualLocalDateTime;
+    private final DateTimeAssertorHelper helper;
 
     protected DateTimeBeAssertionMethods(@Nullable AssertionGroup group, @NonNull String labelForActual, @Nullable LocalDateTime actualLocalDateTime, boolean negated) {
         super(group, labelForActual, negated, false);
         this.actualLocalDateTime = actualLocalDateTime;
+        this.helper = new DateTimeAssertorHelper(labelForActual, actualLocalDateTime, negated, DATETIME_FORMATTER);
     }
 
 
     public void today() {
-        assertCondition(partialAssertionErrorMessage() + "to be today.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be today"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -32,7 +34,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void year(int year) {
-        assertCondition(partialAssertionErrorMessage() + "to be year " + year + "." , () -> {
+        assertCondition(helper.assertionErrorMessage("to be year " + year), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -50,7 +52,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void sameDateAs(@NonNull LocalDate expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be the same date as '" + expected.format(DATE_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be the same date as '" + expected.format(DATE_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -60,7 +62,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void before(@NonNull LocalDateTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be before '" + expected.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be before '" + expected.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -70,7 +72,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void after(@NonNull LocalDateTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be after '" + expected.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be after '" + expected.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -80,7 +82,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void sameOrBefore(@NonNull LocalDateTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be the same or before '" + expected.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be the same or before '" + expected.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -90,7 +92,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void sameOrAfter(@NonNull LocalDateTime expected) {
-        assertCondition(partialAssertionErrorMessage() + "to be the same or after '" + expected.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be the same or after '" + expected.format(DATETIME_FORMATTER) + "'"), () -> {
             if  (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -100,7 +102,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
     
     public void between(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
-        assertCondition(partialAssertionErrorMessage() + "to be between '" + start.format(DATETIME_FORMATTER) + "' and '" + end.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be between '" + start.format(DATETIME_FORMATTER) + "' and '" + end.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -113,7 +115,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDate today = LocalDate.now();
         final LocalDate targetDate = today.plusDays(days);
 
-        assertCondition(partialAssertionErrorMessage() + "to be within " + days + " days from today.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be within " + days + " days from today"), () -> {
             if  (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -128,7 +130,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDate today = LocalDate.now();
         final LocalDate targetDate = today.minusDays(days);
 
-        assertCondition(partialAssertionErrorMessage() + "to be within past " + days + " days from today.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be within past " + days + " days from today"), () -> {
             if  (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -142,7 +144,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     public void moreThanDaysInFuture(int days) {
         final LocalDate targetDate = LocalDate.now().plusDays(days);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + days + " days in future.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + days + " days in future"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -156,7 +158,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     public void moreThanDaysInPast(int days) {
         final LocalDate targetDate = LocalDate.now().minusDays(days);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + days + " days in past.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + days + " days in past"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -171,7 +173,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime targetDateTime = now.plusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be within " + hours + " hours from '" +  now.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be within " + hours + " hours from '" +  now.format(DATETIME_FORMATTER) + "'"), () -> {
             if  (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -184,7 +186,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime targetDateTime = now.minusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be within past " + hours + " hours from '" +  now.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be within past " + hours + " hours from '" +  now.format(DATETIME_FORMATTER) + "'"), () -> {
             if  (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -197,7 +199,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime targetDateTime = now.plusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + hours + " hours in future from '" + now.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + hours + " hours in future from '" + now.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -210,7 +212,7 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime targetDateTime = now.minusHours(hours);
 
-        assertCondition(partialAssertionErrorMessage() + "to be more than " + hours + " hours in past from '" + now.format(DATETIME_FORMATTER) + "'.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be more than " + hours + " hours in past from '" + now.format(DATETIME_FORMATTER) + "'"), () -> {
             if (actualLocalDateTime == null) {
                 return false;
             } else {
@@ -220,17 +222,8 @@ public class DateTimeBeAssertionMethods extends AssertionMethods {
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
+        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
             return negated != (actualLocalDateTime == null);
         });
     }
-
-    private String partialAssertionErrorMessage() {
-        if (labelForActual.isEmpty()) {
-            return "Expected '" + (actualLocalDateTime == null ? "null" : actualLocalDateTime.format(DATETIME_FORMATTER)) + "'" + (negated?" not":"") + " ";
-        } else {
-            return "Expected actual value('" + (actualLocalDateTime == null ? "null" : actualLocalDateTime.format(DATETIME_FORMATTER)) + "') of '" + labelForActual + "'" + (negated?" not":"") + " ";
-        }
-    }
-
 }
