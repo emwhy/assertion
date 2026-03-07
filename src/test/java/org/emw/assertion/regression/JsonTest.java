@@ -1,13 +1,20 @@
 package org.emw.assertion.regression;
 
+import org.emw.assertion.json.JsonAssertor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
-import java.security.KeyStore;
 import java.util.*;
 
-public class JsonTest {
+public class JsonTest implements JsonAssertor {
+    @Test
+    public void testJsonSyntax() {
+        assertJson("").expect(json -> {
+
+        });
+    }
+
     @Test
     public void testJson() {
         final String testJson = """
@@ -104,6 +111,23 @@ public class JsonTest {
                 """;
         final JSONObject jo = new JSONObject(testJson);
 
+        assertJson(testJson).expect(json -> {
+            json.node("/university_system/name").to.not.be("global Tech Institute");
+            json.node("/university_system/founded_year").to.be(1985);
+            json.node("/university_system/founded_year").to.not.be(198);
+            json.node("/university_system").to.excluding("/campuses").be("""
+                {
+                    "name": "Global Tech Institute",
+                    "founded_year": 1985,
+                    "global_stats": {
+                      "total_students": 15400,
+                      "international_ratio": 0.22,
+                      "affiliations": ["Global Edu Group", "Research Alliance"]
+                    }
+                }
+                """);
+        });
+
 //        System.out.println(getJsonObjectPointer("", jo));
 //        generatePointers(jo, "");
         for (Map.Entry<String, Object> entry : getPointerValueMap(testJson).entrySet()) {
@@ -112,7 +136,7 @@ public class JsonTest {
     }
 
     public static Map<String, Object> getPointerValueMap(String jsonText) {
-        final Map<String, Object> results = new LinkedHashMap<>();
+        final Map<String, Object> results = new TreeMap<>();
         final String trimmed = jsonText.trim();
 
         if (!trimmed.isEmpty()) {
