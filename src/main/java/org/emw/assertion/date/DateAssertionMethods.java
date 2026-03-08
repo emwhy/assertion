@@ -27,11 +27,9 @@ public class DateAssertionMethods extends AssertionMethods {
     }
 
     public void be(@NonNull LocalDate expected) {
-        assertCondition(helper.assertionErrorMessage("to be '" + expected.format(FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isEqual(expected) != negated;
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isEqual(expected) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be '" + expected.format(FORMATTER) + "'"));
             }
         });
     }

@@ -32,15 +32,23 @@ public class NumberAssertionMethods extends AssertionMethods {
     public void be(double expected) {
         be(Double.valueOf(expected));
     }
-
     public void be(@NonNull Number expected) {
-        assertCondition(helper.assertionErrorMessage("to equal '" + expected + "'"), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to equal '" + expected + "'");
+            boolean match;
+
             if (actual == null) {
-                return false;
-            } else if (actual instanceof Float || expected instanceof Float) {
-                return (actual.floatValue() == expected.floatValue()) != negated;
+                throw new AssertionError(message);
+            }
+
+            if (actual instanceof Float || expected instanceof Float) {
+                match = actual.floatValue() == expected.floatValue();
             } else {
-                return (actual.doubleValue() == expected.doubleValue()) != negated;
+                match = actual.doubleValue() == expected.doubleValue();
+            }
+
+            if (match == negated) {
+                throw new AssertionError(message);
             }
         });
     }

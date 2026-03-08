@@ -21,35 +21,11 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void moreThan(float expected) { moreThan(Float.valueOf(expected)); }
     public void moreThan(double expected) { moreThan(Double.valueOf(expected)); }
 
-    public void moreThan(@NonNull Number expected) {
-        assertCondition(helper.assertionErrorMessage("to be more than '" + expected + "'"), () -> {
-            if (actual == null) {
-                return false;
-            } else if (actual instanceof Float || expected instanceof Float) {
-                return (actual.floatValue() > expected.floatValue()) != negated;
-            } else {
-                return (actual.doubleValue() > expected.doubleValue()) != negated;
-            }
-        });
-    }
-
     // --- lessThan ---
     public void lessThan(int expected) { lessThan(Integer.valueOf(expected)); }
     public void lessThan(long expected) { lessThan(Long.valueOf(expected)); }
     public void lessThan(float expected) { lessThan(Float.valueOf(expected)); }
     public void lessThan(double expected) { lessThan(Double.valueOf(expected)); }
-
-    public void lessThan(@NonNull Number expected) {
-        assertCondition(helper.assertionErrorMessage("to be less than '" + expected + "'"), () -> {
-            if (actual == null) {
-                return false;
-            } else if (actual instanceof Float || expected instanceof Float) {
-                return (actual.floatValue() < expected.floatValue()) != negated;
-            } else {
-                return (actual.doubleValue() < expected.doubleValue()) != negated;
-            }
-        });
-    }
 
     // --- moreThanOrEqual ---
     public void moreThanOrEqual(int expected) { moreThanOrEqual(Integer.valueOf(expected)); }
@@ -57,59 +33,103 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
     public void moreThanOrEqual(float expected) { moreThanOrEqual(Float.valueOf(expected)); }
     public void moreThanOrEqual(double expected) { moreThanOrEqual(Double.valueOf(expected)); }
 
-    public void moreThanOrEqual(@NonNull Number expected) {
-        assertCondition(helper.assertionErrorMessage("to be more than or equal '" + expected + "'"), () -> {
-            if (actual == null) {
-                return false;
-            } else if (actual instanceof Float || expected instanceof Float) {
-                return (actual.floatValue() >= expected.floatValue()) != negated;
-            } else {
-                return (actual.doubleValue() >= expected.doubleValue()) != negated;
-            }
-        });
-    }
-
     // --- lessThanOrEqual ---
     public void lessThanOrEqual(int expected) { lessThanOrEqual(Integer.valueOf(expected)); }
     public void lessThanOrEqual(long expected) { lessThanOrEqual(Long.valueOf(expected)); }
     public void lessThanOrEqual(float expected) { lessThanOrEqual(Float.valueOf(expected)); }
     public void lessThanOrEqual(double expected) { lessThanOrEqual(Double.valueOf(expected)); }
 
-    public void lessThanOrEqual(@NonNull Number expected) {
-        assertCondition(helper.assertionErrorMessage("to be less than or equal '" + expected + "'"), () -> {
-            if (actual == null) {
-                return false;
-            }
-            else if (actual instanceof Float || expected instanceof Float) {
-                return (actual.floatValue() <= expected.floatValue()) != negated;
-            } else {
-                return (actual.doubleValue() <= expected.doubleValue()) != negated;
-            }
-        });
-    }
-
     // --- between ---
     public void between(double lower, double upper) {
         between(Double.valueOf(lower), Double.valueOf(upper));
     }
 
-    public void between(@NonNull Number expectedLower, @NonNull Number expectedUpper) {
-        assertCondition(helper.assertionErrorMessage("to be between '" + expectedLower + "' and '" + expectedUpper + "'"), () -> {
+    public void moreThan(@NonNull Number expected) {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be more than '" + expected + "'");
             if (actual == null) {
-                return false;
-            } else if (actual instanceof Float || expectedLower instanceof Float || expectedUpper instanceof Float) {
+                throw new AssertionError(message);
+            }
+            boolean match = (actual instanceof Float || expected instanceof Float)
+                    ? actual.floatValue() > expected.floatValue()
+                    : actual.doubleValue() > expected.doubleValue();
+            if (match == negated) {
+                throw new AssertionError(message);
+            }
+        });
+    }
+
+    public void lessThan(@NonNull Number expected) {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be less than '" + expected + "'");
+            if (actual == null) {
+                throw new AssertionError(message);
+            }
+            boolean match = (actual instanceof Float || expected instanceof Float)
+                    ? actual.floatValue() < expected.floatValue()
+                    : actual.doubleValue() < expected.doubleValue();
+            if (match == negated) {
+                throw new AssertionError(message);
+            }
+        });
+    }
+
+    public void moreThanOrEqual(@NonNull Number expected) {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be more than or equal '" + expected + "'");
+            if (actual == null) {
+                throw new AssertionError(message);
+            }
+            boolean match = (actual instanceof Float || expected instanceof Float)
+                    ? actual.floatValue() >= expected.floatValue()
+                    : actual.doubleValue() >= expected.doubleValue();
+            if (match == negated) {
+                throw new AssertionError(message);
+            }
+        });
+    }
+
+    public void lessThanOrEqual(@NonNull Number expected) {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be less than or equal '" + expected + "'");
+            if (actual == null) {
+                throw new AssertionError(message);
+            }
+            boolean match = (actual instanceof Float || expected instanceof Float)
+                    ? actual.floatValue() <= expected.floatValue()
+                    : actual.doubleValue() <= expected.doubleValue();
+            if (match == negated) {
+                throw new AssertionError(message);
+            }
+        });
+    }
+
+    public void between(@NonNull Number expectedLower, @NonNull Number expectedUpper) {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be between '" + expectedLower + "' and '" + expectedUpper + "'");
+            if (actual == null) {
+                throw new AssertionError(message);
+            }
+            boolean match;
+            if (actual instanceof Float || expectedLower instanceof Float || expectedUpper instanceof Float) {
                 final float val = actual.floatValue();
-                return (val >= expectedLower.floatValue() && val <= expectedUpper.floatValue()) != negated;
+                match = (val >= expectedLower.floatValue() && val <= expectedUpper.floatValue());
             } else {
                 final double val = actual.doubleValue();
-                return (val >= expectedLower.doubleValue() && val <= expectedUpper.doubleValue()) != negated;
+                match = (val >= expectedLower.doubleValue() && val <= expectedUpper.doubleValue());
+            }
+            if (match == negated) {
+                throw new AssertionError(message);
             }
         });
     }
 
     public void nullValue() {
-        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
-            return negated != (actual == null);
+        assertCondition(() -> {
+            if (negated == (actual == null)) {
+                throw new AssertionError(helper.assertionErrorMessage("to be null"));
+            }
         });
     }
+
 }

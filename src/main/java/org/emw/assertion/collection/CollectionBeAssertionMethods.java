@@ -18,14 +18,18 @@ public final class CollectionBeAssertionMethods extends AssertionMethods {
     }
 
     public void empty() {
-        assertCondition(helper.assertionErrorMessage("to be empty"), () -> {
-            return actualCollection != null && negated != actualCollection.isEmpty();
+        assertCondition(() -> {
+            if (actualCollection == null || negated == actualCollection.isEmpty()) {
+                throw new AssertionError(helper.assertionErrorMessage("to be empty"));
+            }
         });
     }
 
     public void nullValue() {
-        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
-            return negated != (actualCollection == null);
+        assertCondition(() -> {
+            if (negated == (actualCollection == null)) {
+                throw new AssertionError(helper.assertionErrorMessage("to be null"));
+            }
         });
     }
 }

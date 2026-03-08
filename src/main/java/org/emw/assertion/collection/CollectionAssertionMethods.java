@@ -30,42 +30,54 @@ public class CollectionAssertionMethods extends AssertionMethods {
 
     public void be(Collection<?> expectedCollection) {
         if (this.anyOrder) {
-            assertCondition(helper.assertionErrorMessage("to be same (in any order) as " + helper.join(expectedCollection)), () -> {
+            assertCondition(() -> {
+                String message = helper.assertionErrorMessage("to be same (in any order) as " + helper.join(expectedCollection));
                 if (actualCollection == null) {
-                    return false;
+                    throw new AssertionError(message);
                 } else {
                     final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).sorted().toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).sorted().toList();
                     final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).sorted().toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).sorted().toList();
 
+                    boolean match = true;
                     if (testActualList.size() != testedExpectedList.size()) {
-                        return negated;
+                        match = false;
                     } else {
                         for (int i = 0; i < testActualList.size(); i++) {
                             if (!testActualList.get(i).equals(testedExpectedList.get(i))) {
-                                return negated;
+                                match = false;
+                                break;
                             }
                         }
-                        return !negated;
+                    }
+
+                    if (negated == match) {
+                        throw new AssertionError(message);
                     }
                 }
             });
         } else {
-            assertCondition(helper.assertionErrorMessage("to be same as " + helper.join(expectedCollection)), () -> {
+            assertCondition(() -> {
+                String message = helper.assertionErrorMessage("to be same as " + helper.join(expectedCollection));
                 if (actualCollection == null) {
-                    return false;
+                    throw new AssertionError(message);
                 } else {
                     final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
                     final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
 
+                    boolean match = true;
                     if (testActualList.size() != testedExpectedList.size()) {
-                        return negated;
+                        match = false;
                     } else {
                         for (int i = 0; i < testActualList.size(); i++) {
                             if (!testActualList.get(i).equals(testedExpectedList.get(i))) {
-                                return negated;
+                                match = false;
+                                break;
                             }
                         }
-                        return !negated;
+                    }
+
+                    if (negated == match) {
+                        throw new AssertionError(message);
                     }
                 }
             });
@@ -73,11 +85,9 @@ public class CollectionAssertionMethods extends AssertionMethods {
     }
 
     public void haveSizeOf(int expectedSize) {
-        assertCondition(helper.assertionErrorMessage("to have size of " + expectedSize + ", but was " + (actualCollection == null ? "null collection" : actualCollection.size())), () -> {
-            if (actualCollection == null) {
-                return false;
-            } else {
-                return (actualCollection.size() == expectedSize) != negated;
+        assertCondition(() -> {
+            if (actualCollection == null || (actualCollection.size() == expectedSize) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to have size of " + expectedSize + ", but was " + (actualCollection == null ? "null collection" : actualCollection.size())));
             }
         });
     }
@@ -87,20 +97,26 @@ public class CollectionAssertionMethods extends AssertionMethods {
     }
 
     public void have(Collection<?> expectedCollection) {
-        assertCondition(helper.assertionErrorMessage("to have " + helper.join(expectedCollection)), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to have " + helper.join(expectedCollection));
+
             if (actualCollection == null) {
-                return false;
+                throw new AssertionError(message);
             } else {
                 final List<String> testActualList = ignoreCase ? actualCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : actualCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
                 final List<String> testedExpectedList = ignoreCase ? expectedCollection.stream().map(o -> o == null ? "null" : o.toString().toLowerCase()).toList() : expectedCollection.stream().map(o -> o == null ? "null" : o.toString()).toList();
+                boolean allContained = true;
 
                 for (String expected : testedExpectedList) {
                     if (!testActualList.contains(expected)) {
-                        return negated;
+                        allContained = false;
+                        break;
                     }
                 }
-                return !negated;
+
+                if (negated == allContained) {
+                    throw new AssertionError(message);
+                }
             }
         });
-    }
-}
+    }}

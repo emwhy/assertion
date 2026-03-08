@@ -14,20 +14,21 @@ public final class BooleanBeAssertionMethods extends AssertionMethods {
     }
 
     public void trueValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be true.", () -> {
-            if (actual == null) {
-                return false;
-            } else {
-                return negated != actual;
+        assertCondition(() -> {
+            if (actual == null || negated == actual) {
+                throw new AssertionError(partialAssertionErrorMessage() + "to be true.");
             }
         });
     }
 
     public void nullValue() {
-        assertCondition(partialAssertionErrorMessage() + "to be null.", () -> {
-            return negated != (actual == null);
+        assertCondition(() -> {
+            if (negated == (actual == null)) {
+                throw new AssertionError(partialAssertionErrorMessage() + "to be null.");
+            }
         });
     }
+
 
     private String partialAssertionErrorMessage() {
         if (labelForActual.isEmpty()) {

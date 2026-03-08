@@ -3,6 +3,7 @@ package org.emw.assertion.json;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emw.assertion.AssertionMethods;
+import org.emw.assertion.string.StringAssertor;
 
 public class JsonObjectBeAssertionMethods extends AssertionMethods {
     private final @Nullable Object obj;
@@ -14,6 +15,39 @@ public class JsonObjectBeAssertionMethods extends AssertionMethods {
         this.obj = obj;
         this.negated = negated;
         this.ignoreCase = ignoreCase;
+    }
+
+    public JsonString string() {
+        assertCondition(() -> {
+            if (this.obj == null) {
+                throw new AssertionError("Node is null.");
+            } else if (!(this.obj instanceof String)) {
+                throw new AssertionError("Node is not a string.");
+            }
+        });
+        return new JsonString((String) this.obj);
+    }
+
+    public class JsonString {
+        private final @Nullable String actual;
+        private final JsonStringAssertor assertor = new JsonStringAssertor();
+
+        private JsonString(@Nullable String actual) {
+            this.actual = actual;
+        }
+
+        public void empty() {
+            assertCondition(() -> {
+                if (negated) {
+                    assertor.expect("JsonNode", this.actual).to.not.be.empty();
+                } else {
+                    assertor.expect("JsonNode", this.actual).to.be.empty();
+                }
+            });
+        }
+    }
+
+    private class JsonStringAssertor implements StringAssertor {
     }
 
 //    public final StringBeAssertionMethods be;

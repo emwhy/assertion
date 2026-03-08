@@ -24,23 +24,30 @@ public final class StringBeAssertionMethods extends AssertionMethods {
     }
 
     public void oneOf(Collection<String> expectedTexts) {
-        assertCondition(helper.assertionErrorMessage("to be one of '" + String.join("', '", expectedTexts) + "'"), () -> {
+        assertCondition(() -> {
+            String message = helper.assertionErrorMessage("to be one of '" + String.join("', '", expectedTexts) + "'");
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final Collection<String> testedExpectedTexts = ignoreCase ? expectedTexts.stream().map(String::toLowerCase).toList() : expectedTexts;
 
-            return (actual != null && testedExpectedTexts.contains(testedActual)) != negated;
+            if (actual == null || (testedExpectedTexts.contains(testedActual)) == negated) {
+                throw new AssertionError(message);
+            }
         });
     }
 
     public void empty() {
-        assertCondition(helper.assertionErrorMessage("to be empty"), () -> {
-            return actual != null && negated != actual.isEmpty();
+        assertCondition(() -> {
+            if (actual == null || negated == actual.isEmpty()) {
+                throw new AssertionError(helper.assertionErrorMessage("to be empty"));
+            }
         });
     }
 
     public void nullValue() {
-        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
-            return negated != (actual == null);
+        assertCondition(() -> {
+            if (negated == (actual == null)) {
+                throw new AssertionError(helper.assertionErrorMessage("to be null"));
+            }
         });
     }
 

@@ -13,21 +13,23 @@ public abstract class AssertionMethods extends Connector {
         this.ignoreCase = ignoreCase;
     }
 
-    protected interface Assertion {
-        boolean getResult();
+    protected interface AssertionAction {
+        void doAssertiveAction();
     }
 
-    protected final void assertCondition(String errorMessage, Assertion assertion) {
-        if (!assertion.getResult()) {
+    protected final void assertCondition(@NonNull AssertionAction assertion) {
+        try {
+            assertion.doAssertiveAction();
+        } catch (Throwable th) {
             if (group == null) {
-                throw new AssertionError(errorMessage);
-            } else  {
-                this.addToGroup(new AssertionError(errorMessage));
+                throw th;
+            } else {
+                this.addToGroup(th);
             }
         }
     }
 
-    protected final void addToGroup(Throwable throwable) {
+    protected final void addToGroup(@NonNull Throwable throwable) {
         if (this.group != null) {
             this.group.addThrowable(throwable);
         }

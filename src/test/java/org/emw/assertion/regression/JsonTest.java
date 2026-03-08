@@ -112,20 +112,44 @@ public class JsonTest implements JsonAssertor {
         final JSONObject jo = new JSONObject(testJson);
 
         assertJson(testJson).expect(json -> {
-            json.node("/university_system/name").to.not.be("global Tech Institute");
+            json.node("/university_system/name").to.caseInsensitively.be("global Tech Institute");
+            json.node("/university_system/name").to.be("Global Tech Institute");
             json.node("/university_system/founded_year").to.be(1985);
             json.node("/university_system/founded_year").to.not.be(198);
-            json.node("/university_system").to.excluding("/campuses").be("""
+            json.node("/university_system/global_stats/international_ratio").to.be(0.22);
+            json.node("/university_system/founded_year").to.exists();
+            json.node("/university_system/name").to.not.be.string().empty();
+            json.node("/university_system").to.excluding("/campuses").excluding("/global_stats/total_students").be("""
                 {
                     "name": "Global Tech Institute",
                     "founded_year": 1985,
                     "global_stats": {
-                      "total_students": 15400,
+                      "total_students": 154000000,
                       "international_ratio": 0.22,
                       "affiliations": ["Global Edu Group", "Research Alliance"]
                     }
                 }
                 """);
+            json.to.containJson("""
+                          {
+                            "access": "24/7",
+                            "type": "Library",
+                            "floors": [
+                              { "level": 1, "section": "Reference" },
+                              { "level": 2, "section": "Quiet Study" }
+                            ]
+                          }
+                    """);
+            json.to.excluding("/access").containJson("""
+                          {
+                            "access": "24/7999",
+                            "type": "Library",
+                            "floors": [
+                              { "level": 1, "section": "Reference" },
+                              { "level": 2, "section": "Quiet Study" }
+                            ]
+                          }
+                    """);
         });
 
 //        System.out.println(getJsonObjectPointer("", jo));

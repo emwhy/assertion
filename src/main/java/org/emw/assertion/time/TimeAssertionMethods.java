@@ -22,11 +22,9 @@ public class TimeAssertionMethods extends AssertionMethods {
     }
 
     public void be(@NonNull LocalTime expected) {
-        assertCondition(helper.assertionErrorMessage("to be '" + expected.format(TIME_FORMATTER) + "'"), () -> {
-            if (actualLocalTime == null) {
-                return false;
-            } else {
-                return actualLocalTime.equals(expected) != negated;
+        assertCondition(() -> {
+            if (actualLocalTime == null || actualLocalTime.equals(expected) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be '" + expected.format(TIME_FORMATTER) + "'"));
             }
         });
     }

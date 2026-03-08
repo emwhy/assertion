@@ -22,102 +22,87 @@ public class DateBeAssertionMethods extends AssertionMethods {
         this.helper = new DateAssertorHelper(labelForActual, actualLocalDate, negated, DATE_FORMATTER);
     }
 
-    public void today() {
-        assertCondition(helper.assertionErrorMessage("to be today"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isEqual(LocalDate.now()) != negated;
-            }
-        });
-    }
-
-    public void year(int year) {
-        assertCondition(helper.assertionErrorMessage("to be year " + year), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return (actualLocalDate.getYear() == year) != negated;
-            }
-        });
-    }
-
-    public void sameDateAs(@NonNull LocalDateTime expected) {
-        assertCondition(helper.assertionErrorMessage("to be the same date as '" + expected.format(DATETIME_FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isEqual(expected.toLocalDate()) != negated;
-            }
-        });
-    }
-
     public void before(@NonNull Date date) {
         this.before(date.toLocalDate());
-    }
-
-    public void before(@NonNull LocalDate expected) {
-        assertCondition(helper.assertionErrorMessage("to be before '" + expected.format(DATE_FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isBefore(expected) != negated;
-            }
-        });
     }
 
     public void after(@NonNull Date date) {
         this.after(date.toLocalDate());
     }
 
-    public void after(@NonNull LocalDate expected) {
-        assertCondition(helper.assertionErrorMessage("to be after '" + expected.format(DATE_FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isAfter(expected) != negated;
-            }
-        });
-    }
-
     public void sameOrBefore(@NonNull Date date) {
         this.sameOrBefore(date.toLocalDate());
-    }
-
-    public void sameOrBefore(@NonNull LocalDate expected) {
-        assertCondition(helper.assertionErrorMessage("to be the same or before '" + expected.format(DATE_FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return (actualLocalDate.isEqual(expected) || actualLocalDate.isBefore(expected)) != negated;
-            }
-        });
     }
 
     public void sameOrAfter(@NonNull Date date) {
         this.sameOrAfter(date.toLocalDate());
     }
 
-    public void sameOrAfter(@NonNull LocalDate expected) {
-        assertCondition(helper.assertionErrorMessage("to be the same or after '" + expected.format(DATE_FORMATTER) + "'"), () -> {
-            if  (actualLocalDate == null) {
-                return false;
-            } else {
-                return (actualLocalDate.isEqual(expected) || actualLocalDate.isAfter(expected)) != negated;
-            }
-        });
-    }
-
     public void between(@NonNull Date date1, @NonNull Date date2) {
         this.between(date1.toLocalDate(), date2.toLocalDate());
     }
 
+    public void today() {
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isEqual(LocalDate.now()) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be today"));
+            }
+        });
+    }
+
+    public void year(int year) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || (actualLocalDate.getYear() == year) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be year " + year));
+            }
+        });
+    }
+
+    public void sameDateAs(@NonNull LocalDateTime expected) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isEqual(expected.toLocalDate()) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be the same date as '" + expected.format(DATETIME_FORMATTER) + "'"));
+            }
+        });
+    }
+
+    public void before(@NonNull LocalDate expected) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isBefore(expected) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be before '" + expected.format(DATE_FORMATTER) + "'"));
+            }
+        });
+    }
+
+    public void after(@NonNull LocalDate expected) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isAfter(expected) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be after '" + expected.format(DATE_FORMATTER) + "'"));
+            }
+        });
+    }
+
+    public void sameOrBefore(@NonNull LocalDate expected) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || (actualLocalDate.isEqual(expected) || actualLocalDate.isBefore(expected)) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be the same or before '" + expected.format(DATE_FORMATTER) + "'"));
+            }
+        });
+    }
+
+    public void sameOrAfter(@NonNull LocalDate expected) {
+        assertCondition(() -> {
+            if (actualLocalDate == null || (actualLocalDate.isEqual(expected) || actualLocalDate.isAfter(expected)) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be the same or after '" + expected.format(DATE_FORMATTER) + "'"));
+            }
+        });
+    }
+
     public void between(@NonNull LocalDate start, @NonNull LocalDate end) {
-        assertCondition(helper.assertionErrorMessage("to be between '" + start.format(DATE_FORMATTER) + "' and '" + end.format(DATE_FORMATTER) + "'"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return ((actualLocalDate.isEqual(start) || actualLocalDate.isAfter(start)) && (actualLocalDate.isBefore(end) || actualLocalDate.isEqual(end))) != negated;
+        assertCondition(() -> {
+            final boolean isBetween = (actualLocalDate != null) && (actualLocalDate.isEqual(start) || actualLocalDate.isAfter(start)) && (actualLocalDate.isBefore(end) || actualLocalDate.isEqual(end));
+            if (actualLocalDate == null || isBetween == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be between '" + start.format(DATE_FORMATTER) + "' and '" + end.format(DATE_FORMATTER) + "'"));
             }
         });
     }
@@ -125,12 +110,10 @@ public class DateBeAssertionMethods extends AssertionMethods {
     public void withinDays(int days) {
         final LocalDate today = LocalDate.now();
         final LocalDate targetDate = today.plusDays(days);
-
-        assertCondition(helper.assertionErrorMessage("to be within " + days + " days from today"), () -> {
-            if  (actualLocalDate == null) {
-                return false;
-            } else {
-                return ((actualLocalDate.isEqual(today) || actualLocalDate.isAfter(today)) && (actualLocalDate.isBefore(targetDate) || actualLocalDate.isEqual(targetDate))) != negated;
+        assertCondition(() -> {
+            final boolean isWithin = (actualLocalDate != null) && (actualLocalDate.isEqual(today) || actualLocalDate.isAfter(today)) && (actualLocalDate.isBefore(targetDate) || actualLocalDate.isEqual(targetDate));
+            if (actualLocalDate == null || isWithin == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be within " + days + " days from today"));
             }
         });
     }
@@ -138,43 +121,37 @@ public class DateBeAssertionMethods extends AssertionMethods {
     public void withinPastDays(int days) {
         final LocalDate today = LocalDate.now();
         final LocalDate targetDate = today.minusDays(days);
-
-        assertCondition(helper.assertionErrorMessage("to be within past " + days + " days from today"), () -> {
-            if  (actualLocalDate == null) {
-                return false;
-            } else {
-                return ((actualLocalDate.isEqual(targetDate) || actualLocalDate.isAfter(targetDate)) && (actualLocalDate.isBefore(today) || actualLocalDate.isEqual(today))) != negated;
+        assertCondition(() -> {
+            final boolean isWithin = (actualLocalDate != null) && (actualLocalDate.isEqual(targetDate) || actualLocalDate.isAfter(targetDate)) && (actualLocalDate.isBefore(today) || actualLocalDate.isEqual(today));
+            if (actualLocalDate == null || isWithin == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be within past " + days + " days from today"));
             }
         });
     }
 
     public void moreThanDaysInFuture(int days) {
         final LocalDate targetDate = LocalDate.now().plusDays(days);
-
-        assertCondition(helper.assertionErrorMessage("to be more than " + days + " days in future"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isAfter(targetDate) != negated;
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isAfter(targetDate) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be more than " + days + " days in future"));
             }
         });
     }
 
     public void moreThanDaysInPast(int days) {
         final LocalDate targetDate = LocalDate.now().minusDays(days);
-
-        assertCondition(helper.assertionErrorMessage("to be more than " + days + " days in past"), () -> {
-            if (actualLocalDate == null) {
-                return false;
-            } else {
-                return actualLocalDate.isBefore(targetDate) != negated;
+        assertCondition(() -> {
+            if (actualLocalDate == null || actualLocalDate.isBefore(targetDate) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be more than " + days + " days in past"));
             }
         });
     }
 
     public void nullValue() {
-        assertCondition(helper.assertionErrorMessage("to be null"), () -> {
-            return negated != (actualLocalDate == null);
+        assertCondition(() -> {
+            if (negated == (actualLocalDate == null)) {
+                throw new AssertionError(helper.assertionErrorMessage("to be null"));
+            }
         });
     }
 

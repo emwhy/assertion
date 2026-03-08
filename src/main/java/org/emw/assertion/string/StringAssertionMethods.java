@@ -20,49 +20,60 @@ public class StringAssertionMethods extends AssertionMethods {
     }
 
     public void be(@NonNull String expected) {
-        assertCondition(helper.assertionErrorMessage("to equal '" + expected + "'"), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to equal '" + expected + "'");
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? expected.toLowerCase() : expected;
 
-            return actual != null && negated != testedActual.equals(testedExpected);
+            if (actual == null || negated == testedActual.equals(testedExpected)) {
+                throw new AssertionError(message);
+            }
         });
     }
 
     public void contain(@NonNull String expected) {
-        assertCondition(helper.assertionErrorMessage("to contain '" + expected + "'"), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to contain '" + expected + "'");
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? expected.toLowerCase() : expected;
 
-            return actual != null && negated != testedActual.contains(testedExpected);
+            if (actual == null || negated == testedActual.contains(testedExpected)) {
+                throw new AssertionError(message);
+            }
         });
-
     }
 
     public void startWith(@NonNull String prefix) {
-        assertCondition(helper.assertionErrorMessage("to start with '" + prefix + "'"), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to start with '" + prefix + "'");
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? prefix.toLowerCase() : prefix;
 
-            return actual != null && negated != testedActual.startsWith(testedExpected);
+            if (actual == null || negated == testedActual.startsWith(testedExpected)) {
+                throw new AssertionError(message);
+            }
         });
-
     }
 
     public void endWith(@NonNull String suffix) {
-        assertCondition(helper.assertionErrorMessage("to end with '" + suffix + "'"), () -> {
+        assertCondition(() -> {
+            final String message = helper.assertionErrorMessage("to end with '" + suffix + "'");
             final String testedActual = ignoreCase ? (actual == null ? "" : actual.toLowerCase()) : (actual == null ? "" : actual);
             final String testedExpected = ignoreCase ? suffix.toLowerCase() : suffix;
 
-            return actual != null && negated != testedActual.endsWith(testedExpected);
+            if (actual == null || negated == testedActual.endsWith(testedExpected)) {
+                throw new AssertionError(message);
+            }
         });
-
     }
 
     public void match(@NonNull String regex) {
         final Pattern pattern = Pattern.compile(regex);
-
-        assertCondition(helper.assertionErrorMessage("to match the pattern '" + regex + "'"), () -> {
-            return actual != null && negated != pattern.matcher(actual).matches();
+        assertCondition(() -> {
+            if (actual == null || negated == pattern.matcher(actual).matches()) {
+                throw new AssertionError(helper.assertionErrorMessage("to match the pattern '" + regex + "'"));
+            }
         });
     }
+
 }

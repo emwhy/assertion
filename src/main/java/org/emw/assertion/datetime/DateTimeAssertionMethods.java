@@ -23,12 +23,11 @@ public class DateTimeAssertionMethods extends AssertionMethods {
     }
 
     public void be(@NonNull LocalDateTime expected) {
-        assertCondition(helper.assertionErrorMessage("to be '" + expected.format(DATE_FORMATTER) + "'"), () -> {
-            if (actualLocalDateTime == null) {
-                return false;
-            } else {
-                return actualLocalDateTime.isEqual(expected) != negated;
+        assertCondition(() -> {
+            if (actualLocalDateTime == null || actualLocalDateTime.isEqual(expected) == negated) {
+                throw new AssertionError(helper.assertionErrorMessage("to be '" + expected.format(DATE_FORMATTER) + "'"));
             }
         });
     }
+
 }
