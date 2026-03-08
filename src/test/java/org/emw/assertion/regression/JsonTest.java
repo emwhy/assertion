@@ -22,6 +22,8 @@ public class JsonTest implements JsonAssertor {
                   "university_system": {
                     "name": "Global Tech Institute",
                     "founded_year": 1985,
+                    "end_year": null,
+                    "open": true,
                     "campuses": [
                       {
                         "location": "North Campus",
@@ -118,11 +120,29 @@ public class JsonTest implements JsonAssertor {
             json.node("/university_system/founded_year").to.not.be(198);
             json.node("/university_system/global_stats/international_ratio").to.be(0.22);
             json.node("/university_system/founded_year").to.exists();
-            json.node("/university_system/name").to.not.be.string().empty();
-            json.node("/university_system").to.excluding("/campuses").excluding("/global_stats/total_students").be("""
+            json.node("/university_system/founded_year").to.not.be.stringType();
+            json.node("/university_system/end_year").to.be.nullValue();
+            json.node("/university_system/name").to.not.be.string.empty();
+            json.node("/university_system/name").to.be.string.startWith("Global");
+            json.node("/university_system/name").to.be.string.endWith("Institute");
+            json.node("/university_system/name").to.be.string.contain("Tech");
+            json.node("/university_system/name").to.caseInsensitively.be.string.startWith("GLOBAL");
+            json.node("/university_system/name").to.caseInsensitively.be.string.endWith("INSTITUTE");
+            json.node("/university_system/name").to.caseInsensitively.be.string.contain("TECH");
+            json.node("/university_system/founded_year").to.not.be.stringType();
+            json.node("/university_system/founded_year").to.be.numberType();
+            json.node("/university_system/founded_year").to.be.number.moreThan(1970);
+            json.node("/university_system/founded_year").to.be.number.lessThan(2000);
+            json.node("/university_system/founded_year").to.be.number.between(1000, 2000);
+            json.node("/university_system/founded_year").to.not.be.booleanType();
+            json.node("/university_system/open").to.be.booleanType();
+            json.node("/university_system/open").to.be.bool.trueValue();
+            json.node("/university_system/global_stats/international_ratio").to.be(0.22);
+            json.node("/university_system").to.excluding("/campuses").excluding("/global_stats/total_students").excluding("end_year").be("""
                 {
                     "name": "Global Tech Institute",
                     "founded_year": 1985,
+                    "open": true,
                     "global_stats": {
                       "total_students": 154000000,
                       "international_ratio": 0.22,

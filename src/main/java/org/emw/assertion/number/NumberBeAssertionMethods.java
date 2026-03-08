@@ -46,11 +46,11 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
 
     public void moreThan(@NonNull Number expected) {
         assertCondition(() -> {
-            String message = helper.assertionErrorMessage("to be more than '" + expected + "'");
+            final String message = helper.assertionErrorMessage("to be more than '" + expected + "'");
             if (actual == null) {
                 throw new AssertionError(message);
             }
-            boolean match = (actual instanceof Float || expected instanceof Float)
+            final boolean match = (actual instanceof Float || expected instanceof Float)
                     ? actual.floatValue() > expected.floatValue()
                     : actual.doubleValue() > expected.doubleValue();
             if (match == negated) {
@@ -61,11 +61,11 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
 
     public void lessThan(@NonNull Number expected) {
         assertCondition(() -> {
-            String message = helper.assertionErrorMessage("to be less than '" + expected + "'");
+            final String message = helper.assertionErrorMessage("to be less than '" + expected + "'");
             if (actual == null) {
                 throw new AssertionError(message);
             }
-            boolean match = (actual instanceof Float || expected instanceof Float)
+            final boolean match = (actual instanceof Float || expected instanceof Float)
                     ? actual.floatValue() < expected.floatValue()
                     : actual.doubleValue() < expected.doubleValue();
             if (match == negated) {
@@ -76,11 +76,11 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
 
     public void moreThanOrEqual(@NonNull Number expected) {
         assertCondition(() -> {
-            String message = helper.assertionErrorMessage("to be more than or equal '" + expected + "'");
+            final String message = helper.assertionErrorMessage("to be more than or equal '" + expected + "'");
             if (actual == null) {
                 throw new AssertionError(message);
             }
-            boolean match = (actual instanceof Float || expected instanceof Float)
+            final boolean match = (actual instanceof Float || expected instanceof Float)
                     ? actual.floatValue() >= expected.floatValue()
                     : actual.doubleValue() >= expected.doubleValue();
             if (match == negated) {
@@ -91,11 +91,11 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
 
     public void lessThanOrEqual(@NonNull Number expected) {
         assertCondition(() -> {
-            String message = helper.assertionErrorMessage("to be less than or equal '" + expected + "'");
+            final String message = helper.assertionErrorMessage("to be less than or equal '" + expected + "'");
             if (actual == null) {
                 throw new AssertionError(message);
             }
-            boolean match = (actual instanceof Float || expected instanceof Float)
+            final boolean match = (actual instanceof Float || expected instanceof Float)
                     ? actual.floatValue() <= expected.floatValue()
                     : actual.doubleValue() <= expected.doubleValue();
             if (match == negated) {
@@ -106,7 +106,7 @@ public final class NumberBeAssertionMethods extends AssertionMethods {
 
     public void between(@NonNull Number expectedLower, @NonNull Number expectedUpper) {
         assertCondition(() -> {
-            String message = helper.assertionErrorMessage("to be between '" + expectedLower + "' and '" + expectedUpper + "'");
+            final String message = helper.assertionErrorMessage("to be between '" + expectedLower + "' and '" + expectedUpper + "'");
             if (actual == null) {
                 throw new AssertionError(message);
             }
