@@ -5,16 +5,19 @@ emw-Assertion is a library that provides fluent assertions, inspired by Chai (Ja
 ## Highlights
 
 - Fluent, English-like assertion structure with "expect ... to ..." BDD style format.
-- Supports assertions with string, numeric values and classes, collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).
+- Fluent Json assertion.
 - Assertion grouping.
+- Supports assertions with string, numeric values and classes, collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).
 
 ## Contents
 
   * [Fluent Assertions](#fluent-assertions)
+  * [Json Assertion](#json-assertion)
   * [Assertion Groups](#assertion-groups)
   * [Setting Up emw-Assertion](#setting-up-emw-assertion)
   * [Implementing emw-Assertion](#implementing-emw-assertion)
   * [Finally...](#finally)
+
 
 ## Fluent Assertions
 
@@ -97,6 +100,21 @@ As you can see in these examples, it is written in very fluent manner. It's easy
     expect("Test 11", testTime).to.be.sameOrBefore(LocalTime.of(12, 0, 0));
 
 ```
+
+## Json Assertion
+
+Json content often needs assertion particularly in API tests. But asserting Json content can be
+difficult and cumbersome because flexibility of Json format. 
+
+This library contains Json specific assertion to ease the difficulty of asserting a Json content.
+
+### Feature Highlights
+
+ * **Json-to-Json equality:** Even if Json data have named data in different orders, it would still recognize them as the same, as long as the content are the same.
+ * **Excluding nodes:** Sometimes, everything should match except for a portion of Json (i.e., timestamp). A specific node can be excluded from the assertion.
+ * **Data flexibility:** Assertion can be done on a Json data chunk, or individual data.
+ * **Fluency:** The code can remain fluent as the rest of the library.
+ * **Easily Access data:** It uses Json pointer to access or exclude data.
 
 ## Assertion Groups
 
