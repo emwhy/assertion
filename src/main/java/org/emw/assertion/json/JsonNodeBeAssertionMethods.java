@@ -1175,20 +1175,13 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
                         // Using parseBest to handle both Local and Offset/Zoned times
                         final TemporalAccessor accessor = formatter.parseBest(stringValue, ZonedDateTime::from, OffsetDateTime::from, LocalDateTime::from);
 
-                        switch (accessor) {
-                            case LocalDateTime localDateTime -> {
-                                return localDateTime;
-                            }
-                            case OffsetDateTime offsetDateTime -> {
-                                return offsetDateTime.toLocalDateTime();
-                            }
-                            case ZonedDateTime zonedDateTime -> {
-                                return zonedDateTime.toLocalDateTime();
-                            }
-                            default -> {
-                            }
+                        if (accessor instanceof LocalDateTime localDateTime) {
+                            return localDateTime;
+                        } else if (accessor instanceof OffsetDateTime offsetDateTime) {
+                            return offsetDateTime.toLocalDateTime();
+                        } else if (accessor instanceof ZonedDateTime zonedDateTime) {
+                            return zonedDateTime.toLocalDateTime();
                         }
-
                     } catch (DateTimeParseException e) {
                         // Continue to next formatter
                     }
