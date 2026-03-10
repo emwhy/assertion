@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class JsonNodes extends JsonAssertion implements Iterable<JsonNode> {
+public sealed class JsonNodes extends JsonAssertion implements Iterable<JsonNode> permits ErroredJsonNodes {
     public final JsonNodesAllAssertionMethods to;
     protected final @Nullable JSONArray jsonArray;
 

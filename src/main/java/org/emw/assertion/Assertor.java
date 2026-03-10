@@ -5,6 +5,7 @@ import org.emw.assertion.bool.BooleanAssertor;
 import org.emw.assertion.collection.CollectionAssertor;
 import org.emw.assertion.date.DateAssertor;
 import org.emw.assertion.datetime.DateTimeAssertor;
+import org.emw.assertion.json.JsonAssertor;
 import org.emw.assertion.number.NumberAssertor;
 import org.emw.assertion.string.StringAssertor;
 import org.emw.assertion.time.TimeAssertor;
@@ -36,7 +37,7 @@ import org.emw.assertion.time.TimeAssertor;
  * @see DateTimeAssertor
  * @see TimeAssertor
  */
-public interface Assertor extends StringAssertor, CollectionAssertor, BooleanAssertor, DateAssertor, NumberAssertor, DateTimeAssertor, TimeAssertor {
+public interface Assertor extends StringAssertor, CollectionAssertor, BooleanAssertor, DateAssertor, NumberAssertor, DateTimeAssertor, TimeAssertor, JsonAssertor {
     default void assertionGroup(AssertionGroup.@NonNull GroupAction action) {
         assertionGroup("", action);
     }

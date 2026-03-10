@@ -6,7 +6,7 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-public class JsonNodesAllAssertionMethods extends JsonNodesAssertionMethods {
+public final class JsonNodesAllAssertionMethods extends JsonNodesAssertionMethods {
     public final JsonNodesNotAssertionMethods not;
     public final JsonNodesAnyOrderAssertionMethods inAnyOrder;
     public final JsonNodesCaseInsensitivelyAssertionMethods caseInsensitively;
@@ -22,6 +22,14 @@ public class JsonNodesAllAssertionMethods extends JsonNodesAssertionMethods {
     public JsonNodesAllAssertionMethods excluding(@NonNull String jsonPointer) {
         this.addExcludedNode(jsonPointer);
         return this;
+    }
+
+    @Override
+    protected void setThrowable(@NonNull Throwable throwable) {
+        super.setThrowable(throwable);
+        this.caseInsensitively.setThrowable(throwable);
+        this.not.setThrowable(throwable);
+        this.inAnyOrder.setThrowable(throwable);
     }
 
 }

@@ -6,7 +6,7 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-public class JsonNodesBeAssertionMethods extends JsonAssertionMethods {
+public final class JsonNodesBeAssertionMethods extends JsonAssertionMethods {
 
     protected JsonNodesBeAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable JSONArray jsonArray, boolean negated, boolean ignoreCase, boolean inAnyOrder, @NonNull List<String> excludedNodes) {
         super(group, jsonArray, negated, ignoreCase, inAnyOrder, excludedNodes);

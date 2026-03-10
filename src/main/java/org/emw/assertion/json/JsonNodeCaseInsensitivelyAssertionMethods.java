@@ -5,7 +5,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
-public class JsonNodeCaseInsensitivelyAssertionMethods extends JsonNodeAssertionMethods {
+public final class JsonNodeCaseInsensitivelyAssertionMethods extends JsonNodeAssertionMethods {
     public final JsonNodeAssertionMethods not;
 
     protected JsonNodeCaseInsensitivelyAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable Object obj, boolean negated, boolean ignoreCase, List<String> excludedNodes) {
@@ -18,4 +18,9 @@ public class JsonNodeCaseInsensitivelyAssertionMethods extends JsonNodeAssertion
         return this;
     }
 
+    @Override
+    protected void setThrowable(@NonNull Throwable throwable) {
+        super.setThrowable(throwable);
+        this.be.setThrowable(throwable);
+    }
 }

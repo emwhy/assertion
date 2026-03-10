@@ -3,7 +3,7 @@ package org.emw.assertion.json;
 import org.emw.assertion.exception.AssertionGroupError;
 import org.json.JSONArray;
 
-public class JsonNodesAssertion {
+public final class JsonNodesAssertion {
     private final String json;
 
     protected JsonNodesAssertion(String json) {

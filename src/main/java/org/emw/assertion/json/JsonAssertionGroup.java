@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class JsonAssertionGroup {
+public final class JsonAssertionGroup {
     private final List<Throwable> throwables = new ArrayList<>();
 
     JsonAssertionGroup() {

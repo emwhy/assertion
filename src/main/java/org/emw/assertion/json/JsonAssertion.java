@@ -9,18 +9,6 @@ public abstract class JsonAssertion {
         this.group = group;
     }
 
-    protected interface AssertionAction {
-        void doAssertiveAction();
-    }
-
-    protected final void assertCondition(@NonNull AssertionAction assertion) {
-        try {
-            assertion.doAssertiveAction();
-        } catch (Throwable th) {
-            this.addToGroup(th);
-        }
-    }
-
     protected final void addToGroup(@NonNull Throwable throwable) {
         this.group.addThrowable(throwable);
     }

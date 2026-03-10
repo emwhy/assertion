@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class JsonNodesAssertionMethods extends JsonAssertionMethods {
+public sealed class JsonNodesAssertionMethods extends JsonAssertionMethods permits JsonNodesAllAssertionMethods, JsonNodesAnyOrderAssertionMethods, JsonNodesAnyOrderOnlyAssertionMethods, JsonNodesCaseInsensitivelyAssertionMethods, JsonNodesCaseInsensitivityOnlyAssertionMethods, JsonNodesNotAssertionMethods, JsonNodesNotOnlyAssertionMethods {
     public final JsonNodesBeAssertionMethods be;
 
     protected JsonNodesAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable JSONArray jsonArray, boolean negated, boolean ignoreCase, boolean inAnyOrder, @NonNull List<String> excludedNodes) {
@@ -19,6 +19,30 @@ public class JsonNodesAssertionMethods extends JsonAssertionMethods {
         this.be = new JsonNodesBeAssertionMethods(group, jsonArray, negated, ignoreCase, inAnyOrder, excludedNodes);
     }
 
+    @Override
+    protected void setThrowable(@NonNull Throwable throwable) {
+        super.setThrowable(throwable);
+        this.be.setThrowable(throwable);
+    }
+
+
+    public void exist() {
+        if (negated) {
+            if (throwable() == null) {
+                addToGroup(new AssertionError("Expected node to not exist."));
+            }
+        } else {
+            final Throwable th = throwable();
+
+            if (th != null) {
+                if (th.getMessage() == null) {
+                    addToGroup(new AssertionError("Expected node to exist."));
+                } else {
+                    addToGroup(new AssertionError("Expected node to exist: " + th.getMessage()));
+                }
+            }
+        }
+    }
     public void allMatch(@NonNull Object... expectedArray) {
         allMatch(List.of(expectedArray));
     }

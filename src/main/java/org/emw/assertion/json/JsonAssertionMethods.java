@@ -10,24 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class JsonAssertionMethods extends JsonAssertion {
-    private final @NonNull Object object;
+    private final @Nullable Object object;
     protected final boolean negated;
     protected final boolean ignoreCase;
     protected final boolean inAnyOrder;
     private final @NonNull List<String> excludedNodes = new ArrayList<>();
+    private @Nullable Throwable throwable;
 
     protected JsonAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable Object object, boolean negated, boolean ignoreCase, boolean inAnyOrder, @NonNull List<String> excludedNodes) {
         super(group);
-
-        if (object == null) {
-            throw new JSONException("Node does not exist at the pointer.");
-        }
 
         this.object = object;
         this.negated = negated;
         this.ignoreCase = ignoreCase;
         this.inAnyOrder = inAnyOrder;
         this.excludedNodes.addAll(excludedNodes);
+    }
+
+    protected @Nullable Throwable throwable() {
+        return throwable;
+    }
+
+    protected void setThrowable(@NonNull Throwable throwable) {
+        this.throwable = throwable;
     }
 
     protected void addExcludedNode(@NonNull String jsonPointer) {
@@ -38,23 +43,43 @@ public abstract class JsonAssertionMethods extends JsonAssertion {
         return List.of(excludedNodes.toArray(new String[0]));
     }
 
-    protected Object object() {
+    protected @NonNull Object object() {
+        if (object == null) {
+            // Should not get here because "throwable" value should be populated and handled before getting here.
+            throw new AssertionError("Node is not found.");
+        }
         return object;
     }
 
-    protected JSONObject jsonObject() {
-        if (object instanceof JSONObject) {
-            return (JSONObject) object;
+    protected @NonNull JSONObject jsonObject() {
+        if (object() instanceof JSONObject) {
+            return (JSONObject) object();
         } else {
             throw new JSONException("Not JSONObject.");
         }
     }
 
-    protected JSONArray jsonArray() {
-        if (object instanceof JSONArray) {
-            return (JSONArray) object;
+    protected @NonNull JSONArray jsonArray() {
+        if (object() instanceof JSONArray) {
+            return (JSONArray) object();
         } else  {
             throw new JSONException("Not JSONArray.");
+        }
+    }
+
+    protected interface AssertionAction {
+        void doAssertiveAction();
+    }
+
+    protected final void assertCondition(@NonNull AssertionAction assertion) {
+        if (throwable == null) {
+            try {
+                assertion.doAssertiveAction();
+            } catch (Throwable th) {
+                this.addToGroup(th);
+            }
+        } else {
+            this.addToGroup(throwable);
         }
     }
 }

@@ -8,7 +8,6 @@ import org.emw.assertion.datetime.DateTimeAssertor;
 import org.emw.assertion.number.NumberAssertor;
 import org.emw.assertion.string.StringAssertor;
 import org.emw.assertion.time.TimeAssertor;
-import org.json.JSONException;
 
 import java.sql.Date;
 import java.time.*;
@@ -30,16 +29,12 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
     protected JsonNodeBeAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable Object object, boolean negated, boolean ignoreCase) {
         super(group, object, negated, ignoreCase, false, List.of());
 
-        if (object == null) {
-            throw new JSONException("Node does not exist at the pointer.");
-        } else {
-            this.string = new JsonStringAssertions(object);
-            this.number = new JsonNumberAssertions(object);
-            this.bool = new JsonBooleanAssertions(object);
-            this.date = new JsonDateAssertions(object);
-            this.dateTime = new JsonDateTimeAssertions(object);
-            this.time = new JsonTimeAssertions(object);
-        }
+        this.string = new JsonStringAssertions(object);
+        this.number = new JsonNumberAssertions(object);
+        this.bool = new JsonBooleanAssertions(object);
+        this.date = new JsonDateAssertions(object);
+        this.dateTime = new JsonDateTimeAssertions(object);
+        this.time = new JsonTimeAssertions(object);
     }
 
     public void nullValue() {
@@ -198,17 +193,17 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
     }
 
     public class JsonStringAssertions {
-        private final Object actual;
+        private final @Nullable Object actual;
         private final JsonStringAssertor assertor = new JsonStringAssertor();
 
-        private JsonStringAssertions(@NonNull Object actual) {
+        private JsonStringAssertions(@Nullable Object actual) {
             this.actual = actual;
         }
 
         private String actualString() {
             final Object object = object();
 
-            if (!(object instanceof String)) {
+            if (this.actual == null || !(object instanceof String)) {
                 throw new AssertionError("Node is not a string.");
             } else {
                 return ((String) this.actual).trim();
@@ -331,10 +326,10 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
     }
 
     public class JsonNumberAssertions {
-        private final Object actual;
+        private final @Nullable Object actual;
         private final JsonNumberAssertor assertor = new JsonNumberAssertor();
 
-        private JsonNumberAssertions(@NonNull Object actual) {
+        private JsonNumberAssertions(@Nullable Object actual) {
             this.actual = actual;
         }
 
@@ -408,10 +403,10 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
     }
 
     public class JsonBooleanAssertions {
-        private final Object actual;
+        private final @Nullable Object actual;
         private final JsonBooleanAssertor assertor = new JsonBooleanAssertor();
 
-        private JsonBooleanAssertions(@NonNull Object actual) {
+        private JsonBooleanAssertions(@Nullable Object actual) {
             this.actual = actual;
         }
 
@@ -946,15 +941,15 @@ public class JsonNodeBeAssertionMethods extends JsonAssertionMethods {
                 DateTimeFormatter.ofPattern("H:mm")         // 14:30
         };
 
-        private final Object actual;
+        private final @Nullable Object actual;
         private final @Nullable DateTimeFormatter definedFormat;
         private final JsonTimeAssertor assertor = new JsonTimeAssertor();
 
-        private JsonTimeAssertions(@NonNull Object actual) {
+        private JsonTimeAssertions(@Nullable Object actual) {
             this(actual, null);
         }
 
-        private JsonTimeAssertions(@NonNull Object actual, @Nullable DateTimeFormatter definedFormat) {
+        private JsonTimeAssertions(@Nullable Object actual, @Nullable DateTimeFormatter definedFormat) {
             this.actual = actual;
             this.definedFormat = definedFormat;
         }

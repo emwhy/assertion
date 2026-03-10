@@ -8,7 +8,7 @@ import org.json.JSONPointerException;
 
 import java.util.List;
 
-public class JsonNode extends JsonAssertion {
+public sealed class JsonNode extends JsonAssertion permits ErroredJsonNode {
     public final JsonNodeAllAssertionMethods to;
     protected final @Nullable Object nodeObject;
 
@@ -19,16 +19,32 @@ public class JsonNode extends JsonAssertion {
     }
 
     public JsonNode node(String jsonPointer) {
+
         try {
             if (nodeObject instanceof JSONObject) {
                 final Object o = ((JSONObject) nodeObject).query(jsonPointer);
 
-                return new JsonNode(this.group, o);
+                if (o == null) {
+                    final Throwable th = new JSONException("Cannot find JSON node: '" + jsonPointer + "'");
+                    this.to.setThrowable(th);
+                    return new ErroredJsonNode(group, th);
+                } else if (o instanceof JSONArray) {
+                    final Throwable th = new JSONException("Expected reference to JSON Object, but got reference to JSON Array: '" + jsonPointer + "'");
+                    this.to.setThrowable(th);
+                    return new ErroredJsonNode(group, th);
+                } else {
+                    return new JsonNode(this.group, o);
+                }
             } else {
-                throw new JSONException("Already at a data node. Cannot traverse further: data = '" + nodeObject + "'");
+                final Throwable th = new JSONException("Already at a data node. Cannot traverse further: data = '" + jsonPointer + "'");
+
+                this.to.setThrowable(th);
+                return new ErroredJsonNode(group, th);
             }
         } catch (JSONPointerException ex) {
-            throw new JSONException("Cannot find the node: " + jsonPointer, ex);
+            final Throwable th = new JSONException("Cannot find JSON node: '" + jsonPointer + "'");
+            this.to.setThrowable(th);
+            return new ErroredJsonNode(group, th);
         }
     }
 
@@ -38,18 +54,31 @@ public class JsonNode extends JsonAssertion {
                 final Object o = ((JSONObject) nodeObject).query(jsonPointer);
 
                 if (o == null) {
-                    throw new JSONException("Cannot find JSON node: '" + jsonPointer + "'");
+                    final Throwable th = new JSONException("Cannot find JSON node: '" + jsonPointer + "'");
+                    this.to.setThrowable(th);
+                    return new ErroredJsonNodes(group, th);
                 } else if (o instanceof JSONArray) {
                     return new JsonNodes(this.group, (JSONArray) o);
                 } else {
-                    throw new JSONException("The node is not Json array.");
+                    final Throwable th = new JSONException("Expected reference to JSON Array, but got reference to JSON Object: '" + jsonPointer + "'");
+                    this.to.setThrowable(th);
+                    return new ErroredJsonNodes(group, th);
                 }
             } else {
-                throw new JSONException("Already at a data node. Cannot traverse further: data = '" + nodeObject + "'");
+                final Throwable th = new JSONException("At a data node. Cannot traverse further: data = '" + jsonPointer + "'");
+                this.to.setThrowable(th);
+                return new ErroredJsonNodes(group, th);
             }
         } catch (JSONException ex) {
-            throw new JSONException("Cannot find the node: " + jsonPointer, ex);
+            if (node(jsonPointer) instanceof ErroredJsonNode) {
+                final Throwable th = new JSONException("Cannot find JSON node: '" + jsonPointer + "'", ex);
+                this.to.setThrowable(th);
+                return new ErroredJsonNodes(group, th);
+            } else {
+                final Throwable th = new JSONException("Expected reference to JSON Array, but got reference to JSON Object: '" + jsonPointer + "'");
+                this.to.setThrowable(th);
+                return new ErroredJsonNodes(group, th);
+            }
         }
-
     }
 }

@@ -215,9 +215,11 @@ If you have other favorite assertion solutions, you can also use that in conjunc
 - Download the latest **emw-assertion-release.jar** file from https://github.com/emwhy/assertion/releases/. The javadoc for the framework is packaged in  ***emw-assertion-release-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
 - Add **emw-assertion-release.jar** to the Gradle dependency.
+- Add dependency to ***json-java*** package.
 ```
 dependencies {
     implementation(files("lib/emw-assertion-release.jar"));
+    implementation("org.json:json:20251224")
 }
 ```
 - Reload your Gradle. You should now be able to use emw-Assertion classes.

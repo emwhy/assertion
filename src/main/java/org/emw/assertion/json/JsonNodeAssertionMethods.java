@@ -7,12 +7,36 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class JsonNodeAssertionMethods extends JsonAssertionMethods {
+public sealed class JsonNodeAssertionMethods extends JsonAssertionMethods permits JsonNodeAllAssertionMethods, JsonNodeCaseInsensitivelyAssertionMethods, JsonNodeNotAssertionMethods {
     public final JsonNodeBeAssertionMethods be;
 
     protected JsonNodeAssertionMethods(@NonNull JsonAssertionGroup group, @Nullable Object obj, boolean negated, boolean ignoreCase, @NonNull List<String> excludedNodes) {
         super(group, obj, negated, ignoreCase, false, excludedNodes);
         this.be = new JsonNodeBeAssertionMethods(group, obj, negated, ignoreCase);
+    }
+
+    @Override
+    protected void setThrowable(@NonNull Throwable throwable) {
+        super.setThrowable(throwable);
+        this.be.setThrowable(throwable);
+    }
+
+    public void exist() {
+        if (negated) {
+            if (throwable() == null) {
+                addToGroup(new AssertionError("Expected node to not exist."));
+            }
+        } else {
+            final Throwable th = throwable();
+
+            if (th != null) {
+                if (th.getMessage() == null) {
+                    addToGroup(new AssertionError("Expected node to exist."));
+                } else {
+                    addToGroup(new AssertionError("Expected node to exist: " + th.getMessage()));
+                }
+            }
+        }
     }
 
     public void be(@NonNull Object expected) {
