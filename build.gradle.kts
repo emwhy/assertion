@@ -3,7 +3,7 @@ plugins {
     id("org.checkerframework").version("0.6.61")
 }
 
-group = "emw-assertion"
+group = "assertflow"
 version = "release"
 
 repositories {

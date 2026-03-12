@@ -2,20 +2,40 @@
 <html lang="en">
 
 <head>
-    <title>emw-Assertion: Overview</title>
+    <title>AssertFlow: Overview</title>
 </head>
 
 <body>
-<h1>emw-Assertion</h1>
+<h1>AssertFlow</h1>
 
-emw-Assertion is a library that provides fluent assertions, inspired by Chai (JavaSCript library) in BDD style. It can be used for any projects, such as UI test automation, API test automation and unit testing, that needs to assert various data types.
+AssertFlow is a library that provides fluent assertion syntax, inspired by Chai (JavaSCript library) in BDD style. It is for any project that require data validation, such as UI test automation, API test automation and unit testing.
+<p>
+As the name implies, the aim is to provide useful assertion options while maintaining the code fluidity. Code that are easily readable is less prone to mistake and simplify maintenance.
 
 <h2>Highlights</h2>
 
 <ul>
-    <li>Fluent, English-like assertion structure with "expect ... to ..." BDD style format.</li>
-    <li>Supports assertions with string, numeric values and classes, collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).</li>
+    <li>Fluent, English-like assertion syntax with "expect ... to ..." BDD style format.</li>
+    <li>Fluent Json assertion.</li>
     <li>Assertion grouping.</li>
+    <li>Provides data specific assertion methods for frequently used data types, such as string, numbers (integer, double, etc.), collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).</li>
+</ul>
+
+<h2>JSON Assertion</h2>
+
+JSON content often needs assertion particularly in API tests. But asserting JSON content can be
+difficult and cumbersome because flexibility of JSON format.
+<p>
+This library contains JSON specific assertion to ease the difficulty of asserting a JSON content.
+
+<h3>Feature Highlights</h3>
+
+<ul>
+    <li><b>JSON-to-JSON equality:</b> Even if JSON data have named data in different orders, it would still recognize them as the same, as long as the content are the same.</li>
+    <li><b>Excluding nodes:</b> Sometimes, everything should match except for a portion of JSON (i.e., timestamp). A specific node can be excluded from the assertion.</li>
+    <li><b>Data flexibility:</b> Assertion can be done on a JSON data chunk, or individual data.</li>
+    <li><b>Fluency:</b> The code can remain fluent as the rest of the library.</li>
+    <li><b>Easily Access data:</b> It uses JSON pointer to access or exclude data.</li>
 </ul>
 
 <h2>Assertion Groups</h2>

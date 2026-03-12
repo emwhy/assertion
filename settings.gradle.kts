@@ -1,1 +1,1 @@
-rootProject.name = "emw-assertion"
+rootProject.name = "assertflow"

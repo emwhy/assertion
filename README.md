@@ -1,21 +1,24 @@
-# emw-Assertion
 
-emw-Assertion is a library that provides fluent assertions, inspired by Chai (JavaSCript library) in BDD style. It can be used for any projects, such as UI test automation, API test automation and unit testing, that needs to assert various data types.
+![](.\readme_files\assertflow.png)
+
+AssertFlow is a library that provides fluent assertion syntax, inspired by Chai (JavaSCript library) in BDD style. It is for any project that require data validation, such as UI test automation, API test automation and unit testing.
+
+As the name implies, the aim is to provide useful assertion options while maintaining the code fluidity. Code that are easily readable is less prone to mistake and simplify maintenance.
 
 ## Highlights
 
-- Fluent, English-like assertion structure with "expect ... to ..." BDD style format.
-- Fluent Json assertion.
+- Fluent, English-like assertion syntax with "expect ... to ..." BDD style format.
+- Fluent JSON assertion.
 - Assertion grouping.
-- Supports assertions with string, numeric values and classes, collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).
+- Provides data specific assertion methods for frequently used data types, such as string, numbers (integer, double, etc.), collections, array, date objects (SQL Date and LocalDate), date/time object (LocalDateTime), and Time (LocalTime).
 
 ## Contents
 
   * [Fluent Assertions](#fluent-assertions)
-  * [Json Assertion](#json-assertion)
+  * [JSON Assertion](#json-assertion)
   * [Assertion Groups](#assertion-groups)
-  * [Setting Up emw-Assertion](#setting-up-emw-assertion)
-  * [Implementing emw-Assertion](#implementing-emw-assertion)
+  * [Setting Up AssertFlow](#setting-up-assertflow)
+  * [Implementing AssertFlow](#implementing-assertflow)
   * [Finally...](#finally)
 
 
@@ -101,24 +104,24 @@ As you can see in these examples, it is written in very fluent manner. It's easy
 
 ```
 
-## Json Assertion
+## JSON Assertion
 
-Json content often needs assertion particularly in API tests. But asserting Json content can be
-difficult and cumbersome because flexibility of Json format. 
+JSON content often needs assertion particularly in API tests. But asserting JSON content can be
+difficult and cumbersome because flexibility of JSON format. 
 
-This library contains Json specific assertion to ease the difficulty of asserting a Json content.
+This library contains JSON specific assertion to ease the difficulty of asserting a JSON content.
 
 ### Feature Highlights
 
- * **Json-to-Json equality:** Even if Json data have named data in different orders, it would still recognize them as the same, as long as the content are the same.
- * **Excluding nodes:** Sometimes, everything should match except for a portion of Json (i.e., timestamp). A specific node can be excluded from the assertion.
- * **Data flexibility:** Assertion can be done on a Json data chunk, or individual data.
+ * **JSON-to-JSON equality:** Even if JSON data have named data in different orders, it would still recognize them as the same, as long as the content are the same.
+ * **Excluding nodes:** Sometimes, everything should match except for a portion of JSON (i.e., timestamp). A specific node can be excluded from the assertion.
+ * **Data flexibility:** Assertion can be done on a JSON data chunk, or individual data.
  * **Fluency:** The code can remain fluent as the rest of the library.
- * **Easily Access data:** It uses Json pointer to access or exclude data.
+ * **Easily Access data:** It uses JSON pointer to access or exclude data.
 
 ### Asserting Individual Node End-Point
 
-Individual node end-point can be accessed using Json pointer. Since each end-point
+Individual node end-point can be accessed using JSON pointer. Since each end-point
 may contain different data type, specific type must be specified to do the assertion.
 Before asserting, the data type is checked and throw AssertionError as needed.
 
@@ -236,7 +239,7 @@ This is particularly useful when performing multiple assertions within a same co
 The error message lists all of the encountered errors.
 
 ```
-org.emw.assertion.exception.AssertionGroupError: 3 errors in group
+org.emw.assertflow.exception.AssertionGroupError: 3 errors in group
 
 	Error #1: java.lang.AssertionError: Expected 'test' to equal 'test1'.
 
@@ -245,40 +248,40 @@ org.emw.assertion.exception.AssertionGroupError: 3 errors in group
 	Error #3: java.lang.AssertionError: Expected '1' to equal '0'.
 
 	Error Stack #1:
-		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertion.string.StringAssertionMethods.be(StringConditions.java:23)
-		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
-		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
-		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertflow.string.StringAssertionMethods.be(StringConditions.java:23)
+		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
+		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
+		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #2:
-		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertion.string.StringAssertionMethods.be(StringConditions.java:23)
-		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
-		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
-		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertflow.string.StringAssertionMethods.be(StringConditions.java:23)
+		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
+		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
+		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #3:
-		at org.emw.assertion.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertion.number.NumberAssertionMethods.be(NumberConditions.java:35)
-		at org.emw.assertion.number.NumberAssertionMethods.be(NumberConditions.java:19)
-		at org.emw.assertion.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
-		at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
-		at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
-		at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertflow.number.NumberAssertionMethods.be(NumberConditions.java:35)
+		at org.emw.assertflow.number.NumberAssertionMethods.be(NumberConditions.java:19)
+		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
+		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
+		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
+		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
-	at org.emw.assertion.AssertionGroup.group(AssertionGroup.java:74)
-	at org.emw.assertion.Assertor.assertionGroup(Assertor.java:41)
-	at org.emw.assertion.Assertor.assertionGroup(Assertor.java:37)
-	at org.emw.assertion.regression.AssertionTest.testGroup(AssertionTest.java:211)
+	at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:74)
+	at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
+	at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
+	at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -301,31 +304,31 @@ If you have other favorite assertion solutions, you can also use that in conjunc
      }); 
 ```
 
-## Setting Up emw-Assertion
+## Setting Up AssertFlow
 
 - Ensure that your project is setup with ***Java 17*** or higher.
-- Download the latest **emw-assertion-release.jar** file from https://github.com/emwhy/assertion/releases/. The javadoc for the framework is packaged in  ***emw-assertion-release-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Download the latest **assertflow-release.jar** file from https://github.com/emwhy/assertion/releases/. The javadoc for the framework is packaged in  ***assertflow-release-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
-- Add **emw-assertion-release.jar** to the Gradle dependency.
+- Add **assertflow-release.jar** to the Gradle dependency.
 - Add dependency to ***json-java*** package.
 ```
 dependencies {
-    implementation(files("lib/emw-assertion-release.jar"));
+    implementation(files("lib/assertflow-release.jar"));
     implementation("org.json:json:20251224")
 }
 ```
-- Reload your Gradle. You should now be able to use emw-Assertion classes.
+- Reload your Gradle. You should now be able to use AssertFlow classes.
 
-## Implementing emw-Assertion
+## Implementing AssertFlow
 
-To get access to all emw-Assertion methods that include "expect" and "assertionGroup" methods, implement **Assertor** interface to your test class.
+To get access to all AssertFlow methods that include "expect", "assertJson" and "assertionGroup" methods, implement **AssertFlow** interface to your test class.
 
-If you want all of your test classes to have access to emw-Assertion methods, create a base test class that implements **Assertor** interface.
+If you want all of your test classes to have access to AssertFlow methods, create a base test class that implements **AssertFlow** interface.
 
 Once the interface is implemented, all methods become available in any method within the test class.
 
 ```java
-public class AssertionTest implements Assertor {
+public class AssertionTest implements AssertFlow {
     ...
 }
 

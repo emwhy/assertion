@@ -54,8 +54,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/emw-assertion-release.jar
-          asset_name: emw-assertion-release.jar
+          asset_path: ./build/libs/assertflow-release.jar
+          asset_name: assertflow-release.jar
           asset_content_type: application/java-archive
 
       - name: Upload logs on failure
@@ -71,6 +71,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/emw-assertion-release-javadoc.jar
-          asset_name: emw-assertion-release-javadoc.jar
+          asset_path: ./build/libs/assertflow-release-javadoc.jar
+          asset_name: assertflow-release-javadoc.jar
           asset_content_type: application/java-archive
