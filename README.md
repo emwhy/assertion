@@ -107,9 +107,9 @@ As you can see in these examples, it is written in very fluent manner. It's easy
 ## JSON Assertion
 
 JSON content often needs assertion particularly in API tests. But asserting JSON content can be
-difficult and cumbersome because flexibility of JSON format. 
+tedious and cumbersome because of JSON format's flexibility. 
 
-This library contains JSON specific assertion to ease the difficulty of asserting a JSON content.
+This library contains JSON specific assertion to ease the tediousness of asserting a JSON content.
 
 ### Feature Highlights
 
@@ -121,9 +121,9 @@ This library contains JSON specific assertion to ease the difficulty of assertin
 
 ### Asserting Individual Node End-Point
 
-Individual node end-point can be accessed using JSON pointer. Since each end-point
-may contain different data type, specific type must be specified to do the assertion.
-Before asserting, the data type is checked and throw AssertionError as needed.
+Individual end-point node can be accessed with JSON pointer. Since each end-point
+may contain different data type, type must be specified to do the assertion.
+Whenever doing the assertion, the data type checking is implied. It throws AssertionError if unexpected type is detected.
 
 ```java
     assertJson(testJson).expect(json -> {
@@ -154,7 +154,7 @@ Before asserting, the data type is checked and throw AssertionError as needed.
 
 ```
 ### Asserting for JSON Data
-Rather than dealing with individual node end-point, we can assert a chunk of JSON data. 
+Instead of asserting each end-point node individually, we can assert a chunk of JSON data. 
 ```java
 
     assertJson(testJson).expect(json -> {
@@ -184,11 +184,23 @@ Rather than dealing with individual node end-point, we can assert a chunk of JSO
     });
 
 ```
+
+It's also possible to use JSON pointer to get to the specific JSON data node before asserting for a JSON data.
+
+```java
+    assertJson(testJson).expect(json -> {
+        // This would only look at the "/floors" node for the specified JSON data.
+        json.node("/floors").to.findJson("""
+            { "level": 1, "section": "Reference" }
+        """);
+    });
+```
+
 ### Excluding Nodes
-Certain JSON data may never match up in assertion, such at timestamp value or randomly generated hash values. 
+Certain JSON data may never exactly match up in assertion, such at timestamp value or randomly generated hash values. 
 Sometimes, that leads to complex assertion code to get around.
 
-In the assertion framework, we can simply exclude those specific nodes from assertion.
+In AssertFlow library, we can simply exclude those specific nodes from assertion.
 ```java
     assertJson(testJson).expect(json -> {
         // "access" node value can be anything and still match, because it is excluded.
@@ -210,14 +222,16 @@ In the assertion framework, we can simply exclude those specific nodes from asse
 
 Let's say you have 10 assertions. In that assertions, the first one fails. If that happens, 9 other assertions are not being executed. That's many tests to be skipped without validations until the first one is fixed.
 
-AssertionGroup address this issue by adding ability to group multiple assertions.
+**AssertionGroup** address this issue by adding ability to group multiple assertions.
 
-All assertions within a group are guaranteed to be tested, even if some of assertions fail. At the end of the group, all errors are bundled together into **AssertionGroupError**. 
+All assertions within a group are guaranteed to be tested. At the end of the group, all errors are bundled together into **AssertionGroupError**. 
 All error messages are displayed as a part of **AssertionGroupError**.
 
 This solves issue of subsequent assertions being skipped over for earlier failures.
 
 This is particularly useful when performing multiple assertions within a same context, like testing all content within a same web page.
+
+AssertFlow's JSON assertion uses assertion grouping for assertions within the a JSON context, so that all assertion error on a JSON data are shown together.
 
 ```java
     // This would throw AssertionError on the first "expect". Until this is fixed, you have no idea
