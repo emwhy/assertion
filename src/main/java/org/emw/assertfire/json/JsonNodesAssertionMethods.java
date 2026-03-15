@@ -6,6 +6,9 @@ import org.emw.assertfire.collection.CollectionAssertor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -68,7 +71,6 @@ public sealed class JsonNodesAssertionMethods extends JsonAssertionMethods permi
                 throw new AssertionError("Expected JSON array size does not match with the actual size.");
             } else if (this.inAnyOrder) {
                 final List<Object> expectedList = new ArrayList<>(expectedCollection).stream().map(JsonHelper::jsonMapper).sorted(new JsonHelper.JsonComparator()).toList();
-
                 final JsonCollectionAssertor assertor = new JsonCollectionAssertor();
 
                 if (expectedList.stream().allMatch(o -> o instanceof JSONArray || o instanceof JSONObject)) {
@@ -126,16 +128,63 @@ public sealed class JsonNodesAssertionMethods extends JsonAssertionMethods permi
     }
 
     /**
-     * Assert that the JSON array matches the provided JSON string.
-     * @param expected a JSON string representing a JSON array
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonUrl URL to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
      */
-    public void be(@NonNull String expected) {
-        assertCondition(() -> {
-            final Object expectedObject = JsonHelper.isJsonArray(expected) ? new JSONArray(expected) : expected;
-            final JSONArray jsonArray = jsonArray();
+    public void be(@Nullable URL jsonUrl, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonUrl, formatterArgs));
+    }
 
-            if (expectedObject instanceof JSONArray) {
-                final String errorMessage = JsonHelper.matchJson(jsonArray, expectedObject, this.excludedNodes(), this.ignoreCase);
+    /**
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonPath Path to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void be(@NonNull Path jsonPath, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonPath, formatterArgs));
+    }
+
+    /**
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonFile JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void be(@NonNull File jsonFile, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonFile, formatterArgs));
+    }
+
+    /**
+     * Assert that the JSON array matches the provided JSON string or JSONArray.
+     * @param expected a JSON string or JSONArray representing a JSON array
+     */
+    public void be(@NonNull Object expected) {
+        assertCondition(() -> {
+            if (expected instanceof String) {
+                final String expectedString = String.valueOf(expected);
+                final Object expectedObject = JsonHelper.isJsonArray(expectedString) ? new JSONArray(expectedString) : expected;
+                final JSONArray jsonArray = jsonArray();
+
+                if (expectedObject instanceof JSONArray) {
+                    final String errorMessage = JsonHelper.matchJson(jsonArray, expectedObject, this.excludedNodes(), this.ignoreCase);
+
+                    if (negated) {
+                        if (errorMessage.isEmpty()) {
+                            throw new AssertionError("Expected JSON to not match, but they match.");
+                        }
+                    } else {
+                        if (!errorMessage.isEmpty()) {
+                            throw new AssertionError(errorMessage);
+                        }
+                    }
+                } else {
+                    if (!negated) {
+                        throw new AssertionError("Expected JSON to match.");
+                    }
+                }
+            } else if (expected instanceof JSONArray) {
+                final JSONArray jsonArray = jsonArray();
+                final String errorMessage = JsonHelper.matchJson(jsonArray, expected, this.excludedNodes(), this.ignoreCase);
 
                 if (negated) {
                     if (errorMessage.isEmpty()) {
@@ -155,7 +204,7 @@ public sealed class JsonNodesAssertionMethods extends JsonAssertionMethods permi
     }
 
     /**
-     * Assert that expected JSON object is found within the actual JSON array.
+     * Assert that expected JSON data is found within the actual JSON array.
      * @param containedJsonText the JSON string
      */
     public void findJson(@NonNull String containedJsonText) {
@@ -168,40 +217,48 @@ public sealed class JsonNodesAssertionMethods extends JsonAssertionMethods permi
         }
     }
 
-    /**
-     * Assert that expected JSON object is found within the actual JSON array.
-     * @param containedJson the {@link JSONObject} to find
-     */
-    public void findJson(@NonNull JSONObject containedJson) {
-        assertCondition(() -> {
-            final JSONArray jsonArray = jsonArray();
 
-            if (negated) {
-                if (JsonHelper.findJson(jsonArray, containedJson, this.excludedNodes(), this.ignoreCase)) {
-                    throw new AssertionError("Expected to not find JSON data within actual JSON data.");
-                }
-            } else {
-                if (!JsonHelper.findJson(jsonArray, containedJson, this.excludedNodes(), this.ignoreCase)) {
-                    throw new AssertionError("Expected to find JSON data within actual JSON data.");
-                }
-            }
-        });
+    /**
+     * Assert that expected JSON data is found within the actual JSON array.
+     * @param jsonUrl URL to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void findJson(@Nullable URL jsonUrl, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonUrl, formatterArgs));
     }
 
     /**
-     * Assert that expected JSON array is found within the actual JSON array.
-     * @param containedJson the {@link JSONArray} to find
+     * Assert that expected JSON data is found within the actual JSON array.
+     * @param jsonPath Path to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
      */
-    public void findJson(@NonNull JSONArray containedJson) {
+    public void findJson(@NonNull Path jsonPath, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonPath, formatterArgs));
+    }
+
+    /**
+     * Assert that expected JSON data is found within the actual JSON array.
+     * @param jsonFile JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void findJson(@NonNull File jsonFile, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonFile, formatterArgs));
+    }
+
+    /**
+     * Assert that expected JSON data is found within the actual JSON array.
+     * @param jsonToFind JSONObject or JSONArray to find
+     */
+    public void findJson(@NonNull Object jsonToFind) {
         assertCondition(() -> {
             final JSONArray jsonArray = jsonArray();
 
             if (negated) {
-                if (JsonHelper.findJson(jsonArray, containedJson, this.excludedNodes(), this.ignoreCase)) {
+                if (JsonHelper.findJson(jsonArray, jsonToFind, this.excludedNodes(), this.ignoreCase)) {
                     throw new AssertionError("Expected to not find JSON data within actual JSON data.");
                 }
             } else {
-                if (!JsonHelper.findJson(jsonArray, containedJson, this.excludedNodes(), this.ignoreCase)) {
+                if (!JsonHelper.findJson(jsonArray, jsonToFind, this.excludedNodes(), this.ignoreCase)) {
                     throw new AssertionError("Expected to find JSON data within actual JSON data.");
                 }
             }

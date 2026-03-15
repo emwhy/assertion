@@ -5,6 +5,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 
 public sealed class JsonNodeAssertionMethods extends JsonAssertionMethods permits JsonNodeAllAssertionMethods, JsonNodeCaseInsensitivelyAssertionMethods, JsonNodeNotAssertionMethods {
@@ -43,6 +46,33 @@ public sealed class JsonNodeAssertionMethods extends JsonAssertionMethods permit
     }
 
     /**
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonUrl URL to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void be(@Nullable URL jsonUrl, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonUrl, formatterArgs));
+    }
+
+    /**
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonPath Path to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void be(@NonNull Path jsonPath, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonPath, formatterArgs));
+    }
+
+    /**
+     * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding).
+     * @param jsonFile JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void be(@NonNull File jsonFile, String... formatterArgs) {
+        be(JsonHelper.loadJsonFile(jsonFile, formatterArgs));
+    }
+
+    /**
      * Assert for the exact match, other than described by modifiers (not, caseInsensitively, excluding). It can be JSON
      * content or endpoint values (string, number, etc.).
      * @param expected expected data
@@ -53,7 +83,7 @@ public sealed class JsonNodeAssertionMethods extends JsonAssertionMethods permit
             final Object object = this.object();
 
             if (expectedObject instanceof JSONObject && object instanceof JSONObject) {
-                final String errorMessage = JsonHelper.matchJson((JSONObject) object, (JSONObject) expectedObject, this.excludedNodes(), this.ignoreCase);
+                final String errorMessage = JsonHelper.matchJson(object, expectedObject, this.excludedNodes(), this.ignoreCase);
 
                 if (negated) {
                     if (errorMessage.isEmpty()) {
@@ -98,31 +128,48 @@ public sealed class JsonNodeAssertionMethods extends JsonAssertionMethods permit
     }
 
     /**
-     * Assert that JSON segment can be found somewhere within the current JSON context. The expected JSON does not need to be
-     * a direct child node of the JSON context.
-     * @param jsonObjectToBeFound JSONObject to be found
+     * Assert that expected JSON data is found within the actual JSON object.
+     * @param jsonUrl URL to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
      */
-    public void findJson(@NonNull JSONObject jsonObjectToBeFound) {
-        assertCondition(() -> {
-            final Object object = this.object();
-
-            if (JsonHelper.findJson(object, jsonObjectToBeFound, this.excludedNodes(), this.ignoreCase) == negated) {
-                throw new AssertionError("Expected the actual JSON data to contain the expected JSON data.");
-            }
-        });
+    public void findJson(@Nullable URL jsonUrl, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonUrl, formatterArgs));
     }
 
     /**
-     * Assert that JSON segment can be found somewhere within the current JSON context. The expected JSON does not need to be
-     * a direct child node of the JSON context.
-     * @param jsonArrayToBeFound JSONArray to be found
+     * Assert that expected JSON data is found within the actual JSON object.
+     * @param jsonPath Path to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
      */
-    public void findJson(@NonNull JSONArray jsonArrayToBeFound) {
-        assertCondition(() -> {
-            final Object object = this.object();
+    public void findJson(@NonNull Path jsonPath, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonPath, formatterArgs));
+    }
 
-            if (JsonHelper.findJson(object, jsonArrayToBeFound, this.excludedNodes(), this.ignoreCase) == negated) {
-                throw new AssertionError("Expected the actual JSON data to contain the expected JSON data.");
+    /**
+     * Assert that expected JSON data is found within the actual JSON object.
+     * @param jsonFile JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     */
+    public void findJson(@NonNull File jsonFile, String... formatterArgs) {
+        findJson(JsonHelper.loadJsonFile(jsonFile, formatterArgs));
+    }
+
+    /**
+     * Assert that expected JSON data is found within the actual JSON object.
+     * @param jsonToFind JSONObject or JSONArray to find
+     */
+    public void findJson(@NonNull Object jsonToFind) {
+        assertCondition(() -> {
+            final JSONObject jsonObject = jsonObject();
+
+            if (negated) {
+                if (JsonHelper.findJson(jsonObject, jsonToFind, this.excludedNodes(), this.ignoreCase)) {
+                    throw new AssertionError("Expected to not find JSON data within actual JSON data.");
+                }
+            } else {
+                if (!JsonHelper.findJson(jsonObject, jsonToFind, this.excludedNodes(), this.ignoreCase)) {
+                    throw new AssertionError("Expected to find JSON data within actual JSON data.");
+                }
             }
         });
     }

@@ -4,10 +4,10 @@ import org.emw.assertfire.exception.AssertionGroupError;
 import org.json.JSONArray;
 
 public final class JsonNodesAssertion {
-    private final String json;
+    private final JSONArray jsonArray;
 
-    protected JsonNodesAssertion(String json) {
-        this.json = json;
+    protected JsonNodesAssertion(JSONArray jsonArray) {
+        this.jsonArray = jsonArray;
     }
 
     /**
@@ -18,7 +18,7 @@ public final class JsonNodesAssertion {
         final JsonAssertionGroup group = new JsonAssertionGroup();
 
         try {
-            final JsonNodes nodes = new JsonNodes(new JsonAssertionGroup(), new JSONArray(json));
+            final JsonNodes nodes = new JsonNodes(group, jsonArray);
 
             action.withJsonNodes(nodes);
         } finally {

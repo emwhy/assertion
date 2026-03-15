@@ -1,0 +1,91 @@
+{
+  "university_system": {
+    "name": "%s",
+    "founded_year": 1985,
+    "end_year": null,
+    "open": true,
+    "campuses": [
+      {
+        "location": "North Campus",
+        "departments": [
+          {
+            "name": "Computer Science",
+            "head": {
+              "name": "Dr. Sarah Chen",
+              "contact": {
+                "email": "s.chen@gti.edu",
+                "office": "Bldg A, 402"
+              }
+            },
+            "courses": [
+              {
+                "code": "CS101",
+                "title": "Intro to Algorithms",
+                "enrollment": {
+                  "total": 120,
+                  "students": [
+                    {
+                      "id": "ST-001",
+                      "name": "Alice Smith",
+                      "grades": [
+                        { "exam": "Midterm", "score": 88 },
+                        { "exam": "Final", "score": 92 }
+                      ]
+                    },
+                    {
+                      "id": "ST-002",
+                      "name": "Bob Johnson",
+                      "grades": [
+                        { "exam": "Midterm", "score": 75 },
+                        { "exam": "Final", "score": 81 }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "research_labs": [
+              {
+                "lab_name": "AI Foundations",
+                "projects": [
+                  {
+                    "title": "Neural Mapping",
+                    "funding": {
+                      "source": "Tech Corp",
+                      "amount": 500000,
+                      "currency": "USD"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "location": "South Campus",
+        "specialization": "Medical Sciences",
+        "facilities": [
+          {
+            "type": "Hospital",
+            "capacity": 250,
+            "wards": ["ICU", "Pediatrics", "Cardiology"]
+          },
+          {
+            "type": "Library",
+            "access": "24/7",
+            "floors": [
+              { "level": 1, "section": "Reference" },
+              { "level": 2, "section": "Quiet Study" }
+            ]
+          }
+        ]
+      }
+    ],
+    "global_stats": {
+      "total_students": 15400,
+      "international_ratio": 0.22,
+      "affiliations": ["Global Edu Group", "Research Alliance"]
+    }
+  }
+}

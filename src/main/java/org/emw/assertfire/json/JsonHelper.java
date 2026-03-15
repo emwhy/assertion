@@ -6,9 +6,71 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 final class JsonHelper {
+    /**
+     * Load JSON file.
+     * @param jsonUrl URL to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     * @return JSONObject or JSONArray
+     */
+    static Object loadJsonFile(@Nullable URL jsonUrl, @NonNull String... formatterArgs) {
+        try {
+            if (jsonUrl == null) {
+                throw new JSONException("Cannot find JSON file.");
+            }
+            return loadJsonFile(Paths.get(jsonUrl.toURI()), formatterArgs);
+        } catch (URISyntaxException ex) {
+            throw new JSONException("Error while trying to read JSON file.", ex);
+        }
+    }
+
+    /**
+     * Load JSON file.
+     * @param jsonPath Path to JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     * @return JSONObject or JSONArray
+     */
+    static Object loadJsonFile(@NonNull Path jsonPath, @NonNull String... formatterArgs) {
+        return loadJsonFile(jsonPath.toFile(), formatterArgs);
+    }
+
+    /**
+     * Load JSON file.
+     * @param jsonFile JSON file
+     * @param formatterArgs If the text in jsonFile contains format specifier (%s, %d, etc.), these are used for the formatting.
+     * @return JSONObject or JSONArray
+     */
+    static Object loadJsonFile(@NonNull File jsonFile, @NonNull String... formatterArgs) {
+        try {
+            if (jsonFile.exists()) {
+                final String jsonContent = Files.readString(jsonFile.toPath()).trim();
+
+                if (jsonContent.isEmpty()) {
+                    throw new JSONException("JSON file is empty: " + jsonFile.getAbsolutePath());
+                } else if (isJson(jsonContent)) {
+                    return new JSONObject(String.format(jsonContent, (Object[]) formatterArgs));
+                } else if (isJsonArray(jsonContent)) {
+                    return new JSONArray(String.format(jsonContent, (Object[]) formatterArgs));
+                } else {
+                    throw new JSONException("The file is not in JSON format: " + jsonFile.getAbsolutePath());
+                }
+            } else {
+                throw new JSONException("Cannot find JSON file: " + jsonFile.getAbsolutePath());
+            }
+        } catch (IOException ex) {
+            throw new JSONException("Cannot read JSON file: " + jsonFile.getAbsolutePath(), ex);
+        }
+    }
+
     /**
      * Check if the provided text is a JSON object.
      * @param text the string to check
@@ -94,10 +156,10 @@ final class JsonHelper {
                             return "Expected name is missing: " + entry.getKey();
                         } else if (entry.getValue() instanceof String && ignoreCase) {
                             if (!expectedValue.toString().equalsIgnoreCase(entry.getValue().toString())) {
-                                return "Expected value at '" + entry.getKey() + "' does not case-insensitively match actual value. actual: " + entry.getValue() + ", expected: " + expectedValue;
+                                return "Expected value at '" + entry.getKey() + "' does not case-insensitively match actual value. actual: '" + entry.getValue() + "', expected: '" + expectedValue + "'";
                             }
                         } else if (!entry.getValue().equals(expectedValue)) {
-                            return "Expected value at '" + entry.getKey() + "' does not match actual value. actual: " + entry.getValue() + ", expected: " + expectedValue;
+                            return "Expected value at '" + entry.getKey() + "' does not match actual value. actual: '" + entry.getValue() + "', expected: '" + expectedValue + "'";
                         }
                     }
                 }

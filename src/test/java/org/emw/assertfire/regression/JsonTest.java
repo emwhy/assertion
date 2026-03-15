@@ -5,6 +5,9 @@ import org.emw.assertfire.exception.AssertionGroupError;
 import org.emw.assertfire.json.JsonAssertor;
 import org.testng.annotations.Test;
 
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,102 +15,14 @@ import java.time.format.DateTimeFormatter;
 
 public class JsonTest implements JsonAssertor {
     @Test
-    public void testJson() {
-        final String testJson = """
-                {
-                  "university_system": {
-                    "name": "Global Tech Institute",
-                    "founded_year": 1985,
-                    "end_year": null,
-                    "open": true,
-                    "campuses": [
-                      {
-                        "location": "North Campus",
-                        "departments": [
-                          {
-                            "name": "Computer Science",
-                            "head": {
-                              "name": "Dr. Sarah Chen",
-                              "contact": {
-                                "email": "s.chen@gti.edu",
-                                "office": "Bldg A, 402"
-                              }
-                            },
-                            "courses": [
-                              {
-                                "code": "CS101",
-                                "title": "Intro to Algorithms",
-                                "enrollment": {
-                                  "total": 120,
-                                  "students": [
-                                    {
-                                      "id": "ST-001",
-                                      "name": "Alice Smith",
-                                      "grades": [
-                                        { "exam": "Midterm", "score": 88 },
-                                        { "exam": "Final", "score": 92 }
-                                      ]
-                                    },
-                                    {
-                                      "id": "ST-002",
-                                      "name": "Bob Johnson",
-                                      "grades": [
-                                        { "exam": "Midterm", "score": 75 },
-                                        { "exam": "Final", "score": 81 }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            ],
-                            "research_labs": [
-                              {
-                                "lab_name": "AI Foundations",
-                                "projects": [
-                                  {
-                                    "title": "Neural Mapping",
-                                    "funding": {
-                                      "source": "Tech Corp",
-                                      "amount": 500000,
-                                      "currency": "USD"
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "location": "South Campus",
-                        "specialization": "Medical Sciences",
-                        "facilities": [
-                          {
-                            "type": "Hospital",
-                            "capacity": 250,
-                            "wards": ["ICU", "Pediatrics", "Cardiology"]
-                          },
-                          {
-                            "type": "Library",
-                            "access": "24/7",
-                            "floors": [
-                              { "level": 1, "section": "Reference" },
-                              { "level": 2, "section": "Quiet Study" }
-                            ]
-                          }
-                        ]
-                      }
-                    ],
-                    "global_stats": {
-                      "total_students": 15400,
-                      "international_ratio": 0.22,
-                      "affiliations": ["Global Edu Group", "Research Alliance"]
-                    }
-                  }
-                }
-                
-                """;
-        assertJson(testJson).expect(json -> {
+    public void testJson() throws Exception {
+        assertJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute").expect(json -> {
+            json.to.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+            json.to.not.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+            json.to.caseInsensitively.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
+            json.to.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+            json.to.not.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+            json.to.caseInsensitively.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
             json.node("/university_system/name").to.caseInsensitively.be("global Tech Institute");
             json.node("/university_system/name").to.be("Global Tech Institute");
             json.node("/university_system/founded_year").to.be(1985);
@@ -171,35 +86,16 @@ public class JsonTest implements JsonAssertor {
 
     @Test
     public void testJsonArray() {
-        final String testJson = """
-              [
-                {
-                  "id": "ST-001",
-                  "name": "Alice Smith",
-                  "rooms": ["room1-1", "room1-2", "room1-3"],
-                  "numbers": [0.4, 4, 8],
-                  "grades": [
-                    { "exam": "Midterm", "score": 88 },
-                    { "exam": "Final", "score": 92 }
-                  ]
-                },
-                {
-                  "id": "ST-002",
-                  "name": "Bob Johnson",
-                  "rooms": ["room2-1", "room2-2", "room2-3"],
-                  "numbers": [4, 48, .8],
-                  "grades": [
-                    { "exam": "Midterm", "score": 75 },
-                    { "exam": "Final", "score": 81 }
-                  ]
-                }
-              ]
-            """;
-        assertJsonArray(testJson).expect(jsonNodes -> {
+        assertJsonArray(JsonTest.class.getResource("../../../../json/json-array-test.json"), "Alice Smith", "Bob Johnson").expect(jsonNodes -> {
+            jsonNodes.to.be(JsonTest.class.getResource("../../../../json/json-array-test.json"), "Alice Smith", "Bob Johnson");
+            jsonNodes.to.not.be(JsonTest.class.getResource("../../../../json/json-array-test.json"), "Alice Johnson", "Bob Smith");
+            jsonNodes.to.caseInsensitively.be(JsonTest.class.getResource("../../../../json/json-array-test.json"), "alice smith", "bob johnson");
+            jsonNodes.to.findJson(JsonTest.class.getResource("../../../../json/json-array-test.json"), "Alice Smith", "Bob Johnson");
+            jsonNodes.to.not.findJson(JsonTest.class.getResource("../../../../json/json-array-test.json"), "Alice Johnson", "Bob Smith");
+            jsonNodes.to.caseInsensitively.findJson(JsonTest.class.getResource("../../../../json/json-array-test.json"), "alice smith", "bob johnson");
             jsonNodes.first().node("/id").to.be.string.startWith("ST-001");
             jsonNodes.last().node("/id").to.be.string.startWith("ST-002");
             jsonNodes.last().nodes("/grades").first().node("/score").to.be.number.lessThan(88);
-            jsonNodes.to.be(testJson);
             jsonNodes.to.not.be("['test']");
             jsonNodes.to.findJson("""
                 [
@@ -716,6 +612,9 @@ public class JsonTest implements JsonAssertor {
                 "Expected actual value('%s:00.000') of 'JsonNode Time' to be within 1 hours from ".formatted(relativeTimeString),
                 "Expected actual value('%s:00.000') of 'JsonNode Time' to be more than 4 hours in future from ".formatted(relativeTimeString),
                 "Expected actual value('%s:00.000') of 'JsonNode Time' to be more than 1 hours in past from ".formatted(relativeTimeString));
+
+        String test = "blah '%s'";
+        System.out.println("format test -> " + String.format(test, "test", "eeecc"));
     }
 
 

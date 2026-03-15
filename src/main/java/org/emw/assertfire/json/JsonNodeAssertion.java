@@ -4,9 +4,9 @@ import org.emw.assertfire.exception.AssertionGroupError;
 import org.json.JSONObject;
 
 public final class JsonNodeAssertion {
-    private final String json;
+    private final JSONObject json;
 
-    protected JsonNodeAssertion(String json) {
+    JsonNodeAssertion(JSONObject json) {
         this.json = json;
     }
 
@@ -18,7 +18,7 @@ public final class JsonNodeAssertion {
         final JsonAssertionGroup group = new JsonAssertionGroup();
 
         try {
-            final JsonNode node = new JsonNode(group, new JSONObject(json));
+            final JsonNode node = new JsonNode(group, json);
 
             action.withJsonNode(node);
         } finally {

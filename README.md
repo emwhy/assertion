@@ -218,6 +218,30 @@ In AssertFire library, we can simply exclude those specific nodes from assertion
 
 ```
 
+### Reading JSON from a File
+
+The JSON can be read from Path, File, or resources.
+
+In addition, if the file contains string format specifier (%s, %d, etc.), replacement strings can be 
+supplied as parameters. This is useful when doing multiple tests using JSON content of the same structure, but with different data.
+
+```java
+    // test.json file contains %s. It is replaced with "Global Tech Institute".
+    assertJson(JsonTest.class.getResource("../../../../json/test.json"), "Global Tech Institute").expect(json ->{
+        json.node("/university_system/name").to.caseInsensitively.be("global Tech Institute");
+        
+        // Expected JSON content can also be read from a file in "be()" and "findJson()" method, and 
+        // can use format specifier.
+        json.to.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+        json.to.not.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+        json.to.caseInsensitively.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
+        json.to.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+        json.to.not.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+        json.to.caseInsensitively.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
+
+    });
+```
+
 ## Assertion Groups
 
 Let's say you have 10 assertions. In that assertions, the first one fails. If that happens, 9 other assertions are not being executed. That's many tests to be skipped without validations until the first one is fixed.

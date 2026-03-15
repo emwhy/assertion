@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ST-001",
+    "name": "%s",
+    "rooms": ["room1-1", "room1-2", "room1-3"],
+    "numbers": [0.4, 4, 8],
+    "grades": [
+      { "exam": "Midterm", "score": 88 },
+      { "exam": "Final", "score": 92 }
+    ]
+  },
+  {
+    "id": "ST-002",
+    "name": "%s",
+    "rooms": ["room2-1", "room2-2", "room2-3"],
+    "numbers": [4, 48, 0.8],
+    "grades": [
+      { "exam": "Midterm", "score": 75 },
+      { "exam": "Final", "score": 81 }
+    ]
+  }
+]
