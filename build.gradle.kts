@@ -3,7 +3,7 @@ plugins {
     id("org.checkerframework").version("0.6.61")
 }
 
-group = "assertflow"
+group = "assertfire"
 version = "release"
 
 repositories {

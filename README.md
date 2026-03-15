@@ -1,9 +1,9 @@
 
-![](./readme_files/assertflow.png)
+![](./readme_files/assertfire.png)
 
-AssertFlow is a library that provides fluent assertion syntax, inspired by Chai (JavaSCript library) in BDD style. It is for any project that require data validation, such as UI test automation, API test automation and unit testing.
+AssertFire is a library that provides fluent assertion syntax, inspired by Chai (JavaSCript library) in BDD style. It is for any project that require data validation, such as UI test automation, API test automation and unit testing.
 
-As the name implies, the aim is to provide useful assertion options while maintaining the code fluidity. Code that are easily readable is less prone to mistake and simplify maintenance.
+The aim is to provide useful assertion options while maintaining the code fluidity. Code that are easily readable is less prone to mistake and simplify maintenance.
 
 ## Highlights
 
@@ -17,8 +17,8 @@ As the name implies, the aim is to provide useful assertion options while mainta
   * [Fluent Assertions](#fluent-assertions)
   * [JSON Assertion](#json-assertion)
   * [Assertion Groups](#assertion-groups)
-  * [Setting Up AssertFlow](#setting-up-assertflow)
-  * [Implementing AssertFlow](#implementing-assertflow)
+  * [Setting Up AssertFire](#setting-up-assertfire)
+  * [Implementing AssertFire](#implementing-assertfire)
   * [Finally...](#finally)
 
 
@@ -200,7 +200,7 @@ It's also possible to use JSON pointer to get to the specific JSON data node bef
 Certain JSON data may never exactly match up in assertion, such at timestamp value or randomly generated hash values. 
 Sometimes, that leads to complex assertion code to get around.
 
-In AssertFlow library, we can simply exclude those specific nodes from assertion.
+In AssertFire library, we can simply exclude those specific nodes from assertion.
 ```java
     assertJson(testJson).expect(json -> {
         // "access" node value can be anything and still match, because it is excluded.
@@ -218,6 +218,30 @@ In AssertFlow library, we can simply exclude those specific nodes from assertion
 
 ```
 
+### Reading JSON from a File
+
+The JSON can be read from Path, File, or resources.
+
+In addition, if the file contains string format specifier (%s, %d, etc.), replacement strings can be 
+supplied as parameters. This is useful when doing multiple tests using JSON content of the same structure, but with different data.
+
+```java
+    // test.json file contains %s. It is replaced with "Global Tech Institute".
+    assertJson(JsonTest.class.getResource("../../../../json/test.json"), "Global Tech Institute").expect(json ->{
+        json.node("/university_system/name").to.caseInsensitively.be("global Tech Institute");
+        
+        // Expected JSON content can also be read from a file in "be()" and "findJson()" method, and 
+        // can use format specifier.
+        json.to.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+        json.to.not.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+        json.to.caseInsensitively.be(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
+        json.to.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Global Tech Institute");
+        json.to.not.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "Different Parameter");
+        json.to.caseInsensitively.findJson(JsonTest.class.getResource("../../../../json/json-object-test.json"), "global tech institute");
+
+    });
+```
+
 ## Assertion Groups
 
 Let's say you have 10 assertions. In that assertions, the first one fails. If that happens, 9 other assertions are not being executed. That's many tests to be skipped without validations until the first one is fixed.
@@ -231,7 +255,7 @@ This solves issue of subsequent assertions being skipped over for earlier failur
 
 This is particularly useful when performing multiple assertions within a same context, like testing all content within a same web page.
 
-AssertFlow's JSON assertion uses assertion grouping for assertions within the a JSON context, so that all assertion error on a JSON data are shown together.
+AssertFire's JSON assertion uses assertion grouping for assertions within the a JSON context, so that all assertion error on a JSON data are shown together.
 
 ```java
     // This would throw AssertionError on the first "expect". Until this is fixed, you have no idea
@@ -253,7 +277,7 @@ AssertFlow's JSON assertion uses assertion grouping for assertions within the a 
 The error message lists all of the encountered errors.
 
 ```
-org.emw.assertflow.exception.AssertionGroupError: 3 errors in group
+org.emw.assertfire.exception.AssertionGroupError: 3 errors in group
 
 	Error #1: java.lang.AssertionError: Expected 'test' to equal 'test1'.
 
@@ -262,40 +286,40 @@ org.emw.assertflow.exception.AssertionGroupError: 3 errors in group
 	Error #3: java.lang.AssertionError: Expected '1' to equal '0'.
 
 	Error Stack #1:
-		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertflow.string.StringAssertionMethods.be(StringConditions.java:23)
-		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
-		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
-		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertfire.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertfire.string.StringAssertionMethods.be(StringConditions.java:23)
+		at org.emw.assertfire.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:212)
+		at org.emw.assertfire.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:41)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:37)
+		at org.emw.assertfire.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #2:
-		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertflow.string.StringAssertionMethods.be(StringConditions.java:23)
-		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
-		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
-		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertfire.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertfire.string.StringAssertionMethods.be(StringConditions.java:23)
+		at org.emw.assertfire.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:213)
+		at org.emw.assertfire.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:41)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:37)
+		at org.emw.assertfire.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
 	Error Stack #3:
-		at org.emw.assertflow.AssertionMethods.assertCondition(Conditions.java:25)
-		at org.emw.assertflow.number.NumberAssertionMethods.be(NumberConditions.java:35)
-		at org.emw.assertflow.number.NumberAssertionMethods.be(NumberConditions.java:19)
-		at org.emw.assertflow.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
-		at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:71)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
-		at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
-		at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
+		at org.emw.assertfire.AssertionMethods.assertCondition(Conditions.java:25)
+		at org.emw.assertfire.number.NumberAssertionMethods.be(NumberConditions.java:35)
+		at org.emw.assertfire.number.NumberAssertionMethods.be(NumberConditions.java:19)
+		at org.emw.assertfire.regression.AssertionTest.lambda$testGroup$69(AssertionTest.java:215)
+		at org.emw.assertfire.AssertionGroup.group(AssertionGroup.java:71)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:41)
+		at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:37)
+		at org.emw.assertfire.regression.AssertionTest.testGroup(AssertionTest.java:211)
 		at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
 
-	at org.emw.assertflow.AssertionGroup.group(AssertionGroup.java:74)
-	at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:41)
-	at org.emw.assertflow.AssertFlow.assertionGroup(Assertor.java:37)
-	at org.emw.assertflow.regression.AssertionTest.testGroup(AssertionTest.java:211)
+	at org.emw.assertfire.AssertionGroup.group(AssertionGroup.java:74)
+	at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:41)
+	at org.emw.assertfire.AssertFire.assertionGroup(Assertor.java:37)
+	at org.emw.assertfire.regression.AssertionTest.testGroup(AssertionTest.java:211)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -318,31 +342,31 @@ If you have other favorite assertion solutions, you can also use that in conjunc
      }); 
 ```
 
-## Setting Up AssertFlow
+## Setting Up AssertFire
 
 - Ensure that your project is setup with ***Java 17*** or higher.
-- Download the latest **assertflow-release.jar** file from https://github.com/emwhy/assertion/releases/. The javadoc for the framework is packaged in  ***assertflow-release-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Download the latest **assertfire-release.jar** file from https://github.com/emwhy/assertion/releases/. The javadoc for the framework is packaged in  ***assertfire-release-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
-- Add **assertflow-release.jar** to the Gradle dependency.
+- Add **assertfire-release.jar** to the Gradle dependency.
 - Add dependency to ***json-java*** package.
 ```
 dependencies {
-    implementation(files("lib/assertflow-release.jar"));
+    implementation(files("lib/assertfire-release.jar"));
     implementation("org.json:json:20251224")
 }
 ```
-- Reload your Gradle. You should now be able to use AssertFlow classes.
+- Reload your Gradle. You should now be able to use AssertFire classes.
 
-## Implementing AssertFlow
+## Implementing AssertFire
 
-To get access to all AssertFlow methods that include "expect", "assertJson" and "assertionGroup" methods, implement **AssertFlow** interface to your test class.
+To get access to all AssertFire methods that include "expect", "assertJson" and "assertionGroup" methods, implement **AssertFire** interface to your test class.
 
-If you want all of your test classes to have access to AssertFlow methods, create a base test class that implements **AssertFlow** interface.
+If you want all of your test classes to have access to AssertFire methods, create a base test class that implements **AssertFire** interface.
 
 Once the interface is implemented, all methods become available in any method within the test class.
 
 ```java
-public class AssertionTest implements AssertFlow {
+public class AssertionTest implements AssertFire {
     ...
 }
 

@@ -1,1 +1,1 @@
-rootProject.name = "assertflow"
+rootProject.name = "assertfire"
